@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,6 +20,9 @@ interface OperationDao {
 
     @Insert
     fun insertOperation(vararg operation: Operation)
+
+    @Update
+    fun updateOperation(operation: Operation)
 
     @Delete
     fun deleteOperation(operation: Operation)

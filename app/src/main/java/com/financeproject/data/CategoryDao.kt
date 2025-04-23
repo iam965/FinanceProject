@@ -4,20 +4,25 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
     @Query("SELECT * FROM category")
-    fun getAllCategories(): List<Category>
+    fun getAllCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM category WHERE is_profit = 1")
-    fun getAllProfitCategories(): List<Operation>
+    fun getAllProfitCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM category WHERE is_profit = 0")
-    fun getAllLossCategories(): List<Operation>
+    fun getAllLossCategories(): Flow<List<Category>>
 
     @Insert
     fun insertCategory(vararg category: Category)
+
+    @Update
+    fun updateCategory(category: Category)
 
     @Delete
     fun deleteCategory(category: Category)
