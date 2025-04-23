@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OperationDao {
     @Query("SELECT * FROM operations")
-    fun getAllOperations(): List<Operation>
+    fun getAllOperations(): Flow<List<Operation>>
 
     @Query("SELECT * FROM operations WHERE is_profit = 1")
     fun getAllProfit(): Flow<List<Operation>>
@@ -19,6 +20,9 @@ interface OperationDao {
 
     @Insert
     fun insertOperation(vararg operation: Operation)
+
+    @Update
+    fun updateOperation(operation: Operation)
 
     @Delete
     fun deleteOperation(operation: Operation)
