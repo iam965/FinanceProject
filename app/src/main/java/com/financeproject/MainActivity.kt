@@ -157,9 +157,10 @@ fun Expense(){
 
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     FinanceProjectTheme {
     }
-}
+}*/
