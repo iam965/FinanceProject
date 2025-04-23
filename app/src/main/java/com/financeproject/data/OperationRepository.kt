@@ -3,6 +3,7 @@ package com.financeproject.data
 import kotlinx.coroutines.flow.Flow
 
 class OperationRepository(private val operationDao: OperationDao) {
+    val allOperations: Flow<List<Operation>> = operationDao.getAllOperations()
     val allProfit: Flow<List<Operation>> = operationDao.getAllProfit()
     val allLoss: Flow<List<Operation>> = operationDao.getAllLoss()
 

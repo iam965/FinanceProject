@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OperationDao {
     @Query("SELECT * FROM operations")
-    fun getAllOperations(): List<Operation>
+    fun getAllOperations(): Flow<List<Operation>>
 
     @Query("SELECT * FROM operations WHERE is_profit = 1")
     fun getAllProfit(): Flow<List<Operation>>
