@@ -57,7 +57,7 @@ fun MainScreen(){
         bottomBar = {BottomNavBar(navController)}
     ){innerPadding->
         Column (modifier = Modifier.padding(innerPadding)){
-            NavHost(navController, startDestination = NavRoutes.Income.route){
+            NavHost(navController, startDestination = NavRoutes.Home.route){
                 composable (NavRoutes.Income.route){ Income()}
                 composable (NavRoutes.Home.route){Home()}
                 composable (NavRoutes.Expense.route){Expense()}
