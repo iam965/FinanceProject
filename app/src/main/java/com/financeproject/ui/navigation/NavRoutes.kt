@@ -1,4 +1,4 @@
-package com.financeproject.data
+package com.financeproject.ui.navigation
 
 sealed class NavRoutes(val route: String) {
     object Income : NavRoutes("income")
