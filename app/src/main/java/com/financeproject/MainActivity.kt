@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,16 +42,33 @@ class MainActivity : ComponentActivity() {
 //мб окно добавления доход/расход
 
 @Composable
-fun MainScreen(){
-    val navController= rememberNavController()
-    Scaffold (
-        bottomBar = { BottomNavBar(navController) }
-    ){innerPadding->
-        Column (modifier = Modifier.padding(innerPadding)){
-            NavHost(navController, startDestination = NavRoutes.Home.route){
-                composable (NavRoutes.Income.route){ Income()}
-                composable (NavRoutes.Home.route){Home()}
-                composable (NavRoutes.Expense.route){Expense()}
+fun MainScreen() {
+    val navController = rememberNavController()
+    var animationSideRight = true
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) },
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            NavHost(navController, startDestination = NavRoutes.Home.route) {
+                composable(NavRoutes.Income.route,
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+                    }
+                ) { Income(); animationSideRight = true }
+                composable(NavRoutes.Home.route,
+                    enterTransition = {
+                        if (animationSideRight) {
+                            slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth })
+                        } else {
+                            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+                        }
+                    }
+                ) { Home() }
+                composable(NavRoutes.Expense.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth }) }
+                ) { Expense(); animationSideRight = false }
             }
         }
     }
