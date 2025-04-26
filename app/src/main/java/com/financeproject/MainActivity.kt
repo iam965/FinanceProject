@@ -16,6 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,6 +63,7 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(mainvm: MainViewModel){
     val navController = rememberNavController()
     var animationSideRight = true
+
     Scaffold(
         bottomBar = { BottomNavBar(navController) },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -74,7 +79,10 @@ fun MainScreen(mainvm: MainViewModel){
                     exitTransition = {
                         slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth})
                     }
-                ) { IncomeScreen(); animationSideRight = true }
+                ) {
+                    IncomeScreen()
+                    animationSideRight = true
+                }
                 composable(
                     NavRoutes.Home.route,
                     enterTransition = {
@@ -91,7 +99,9 @@ fun MainScreen(mainvm: MainViewModel){
                             slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth})
                         }
                     }
-                ) { HomeScreen(mainvm) }
+                ) {
+                    HomeScreen(mainvm)
+                }
                 composable(
                     NavRoutes.Expense.route,
                     enterTransition = {
@@ -100,7 +110,10 @@ fun MainScreen(mainvm: MainViewModel){
                     exitTransition = {
                         slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth})
                     }
-                ) { ExpenseScreen(); animationSideRight = false }
+                ) {
+                    ExpenseScreen();
+                    animationSideRight = false
+                }
             }
         }
     }
