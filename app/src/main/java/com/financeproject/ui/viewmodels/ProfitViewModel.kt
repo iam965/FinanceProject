@@ -2,6 +2,8 @@ package com.financeproject.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.financeproject.data.Category
 import com.financeproject.data.CategoryRepository
@@ -70,6 +72,16 @@ class ProfitViewModel(application: Application): AndroidViewModel(application) {
     fun deleteProfitCategory(profitCategory: Category){
         viewModelScope.launch {
             categoryRepository.deleteCategory(profitCategory)
+        }
+    }
+
+    class ProfitViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ProfitViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return ProfitViewModel(application) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
