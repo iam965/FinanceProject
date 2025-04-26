@@ -14,7 +14,7 @@ fun ExpenseScreen(){
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Red),
+            .background(Color(0xfff5f5f5)),
         contentAlignment = Alignment.Center
     ){
         Text("expense")

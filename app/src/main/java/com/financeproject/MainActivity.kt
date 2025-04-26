@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(mainvm: MainViewModel){
     val navController = rememberNavController()
-    var animationSideRight = true
+    var animationSideRight =true
 
     Scaffold(
         bottomBar = { BottomNavBar(navController) },
@@ -74,29 +75,42 @@ fun MainScreen(mainvm: MainViewModel){
                 composable(
                     NavRoutes.Income.route,
                     enterTransition = {
-                        slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+                        slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth },
+                            animationSpec = tween(300)
+                        )
                     },
                     exitTransition = {
-                        slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth})
+                        slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth},
+                            animationSpec = tween(300)
+                            )
                     }
                 ) {
-                    IncomeScreen()
                     animationSideRight = true
+                    IncomeScreen()
+
                 }
                 composable(
                     NavRoutes.Home.route,
                     enterTransition = {
                         if (animationSideRight) {
-                            slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth })
+                            slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth },
+                                animationSpec = tween(300)
+                                )
                         } else {
-                            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+                            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(300)
+                                )
                         }
                     },
                     exitTransition = {
                         if (animationSideRight){
-                            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth})
+                            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth},
+                                animationSpec = tween(300)
+                                )
                         } else {
-                            slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth})
+                            slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth},
+                                animationSpec = tween(300)
+                                )
                         }
                     }
                 ) {
@@ -105,14 +119,19 @@ fun MainScreen(mainvm: MainViewModel){
                 composable(
                     NavRoutes.Expense.route,
                     enterTransition = {
-                        slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth })
+                        slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth },
+                            animationSpec = tween(300)
+                            )
                     },
                     exitTransition = {
-                        slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth})
+                        slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth},
+                            animationSpec = tween(300)
+                            )
                     }
                 ) {
-                    ExpenseScreen();
                     animationSideRight = false
+                    ExpenseScreen();
+
                 }
             }
         }
