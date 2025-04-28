@@ -16,7 +16,7 @@ fun IncomeScreen(){
             .fillMaxSize()
             .background(Color(0xfff5f5f5)),
         contentAlignment = Alignment.Center
-    ) {
+    ){
         Text("income")
     }
 }

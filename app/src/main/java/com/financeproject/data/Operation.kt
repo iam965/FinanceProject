@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     ])
 data class Operation(
     @PrimaryKey(autoGenerate = true)val id: Long,
-    @ColumnInfo(name = "category")val category: Int,
+    @ColumnInfo(name = "category")val category: String,
     @ColumnInfo(name = "value")val value: Double,
     @ColumnInfo(name = "is_profit")val isprofit: Boolean,
     @ColumnInfo(name = "date")val date: String
