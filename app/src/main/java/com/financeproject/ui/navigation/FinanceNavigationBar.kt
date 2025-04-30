@@ -15,48 +15,58 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.financeproject.R
 
-@Composable
-fun BottomNavBar(navController: NavController) {
-    val items = listOf(
-        BarItem(
-            title = "Expense",
-            image = ImageBitmap.imageResource(R.drawable.loss_icon),
-            route = "expense"
-        ),
-        BarItem(
-            title = "Home",
-            image = ImageBitmap.imageResource(R.drawable.home_icon1),
-            route = "home"
-        ),
-        BarItem(
-            title = "Income",
-            image = ImageBitmap.imageResource(R.drawable.profit_icon),
-            route = "income"
-        )
-    )
+class FinanceNavigationBar(){
+    private val items: List<BarItem>
+    var currentScreen: String = "Home"
+    var targetScreen: String = "Home"
 
-    NavigationBar {
-        val backStackEntry = navController.currentBackStackEntryAsState()
-        val currentRoute=backStackEntry.value?.destination?.route
-
-        items.forEach { navItem->
-            NavigationBarItem(
-                selected = currentRoute==navItem.route,
-                onClick = {
-                    navController.navigate(navItem.route){
-                        popUpTo(navController.graph.findStartDestination().id){saveState=true}
-                        launchSingleTop=true
-                        restoreState=true
-                    }
-                },
-                icon = {
-                    Icon(painter = BitmapPainter(navItem.image),
-                        contentDescription = navItem.title,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
+    init {
+        items = listOf(
+            BarItem(
+                title = "Expense",
+                image = R.drawable.loss_icon,
+                route = "expense"
+            ),
+            BarItem(
+                title = "Home",
+                image = R.drawable.home_icon1,
+                route = "home"
+            ),
+            BarItem(
+                title = "Income",
+                image = R.drawable.profit_icon,
+                route = "income"
             )
-        }
+        )
+    }
 
+    @Composable
+    fun BottomNavBar(navController: NavController) {
+        NavigationBar {
+            val backStackEntry = navController.currentBackStackEntryAsState()
+            val currentRoute=backStackEntry.value?.destination?.route
+
+            items.forEach { navItem->
+                NavigationBarItem(
+                    selected = currentRoute==navItem.route,
+                    onClick = {
+                        targetScreen = navItem.title
+                        navController.navigate(navItem.route){
+                            popUpTo(navController.graph.findStartDestination().id){saveState=true}
+                            launchSingleTop=true
+                            restoreState=true
+                        }
+                        currentScreen = navItem.title
+                    },
+                    icon = {
+                        Icon(painter = BitmapPainter(ImageBitmap.imageResource(navItem.image)),
+                            contentDescription = navItem.title,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                )
+            }
+
+        }
     }
 }

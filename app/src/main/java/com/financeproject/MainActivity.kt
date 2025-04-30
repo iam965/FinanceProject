@@ -28,8 +28,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.financeproject.ui.navigation.BottomNavBar
-import com.financeproject.ui.navigation.NavRoutes
+import com.financeproject.ui.navigation.*
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.screens.*
 import com.financeproject.ui.viewmodels.LossViewModel
@@ -64,9 +63,10 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(mainvm: MainViewModel){
     val navController = rememberNavController()
     var animationSideRight =true
+    val navigationBar: FinanceNavigationBar = FinanceNavigationBar()
 
     Scaffold(
-        bottomBar = { BottomNavBar(navController) },
+        bottomBar = { navigationBar.BottomNavBar(navController) },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary
     ) { innerPadding ->

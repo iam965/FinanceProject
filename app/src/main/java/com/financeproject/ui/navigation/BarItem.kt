@@ -4,6 +4,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 
 data class BarItem(
     val title: String,
-    val image: ImageBitmap,
+    val image: Int,
     val route: String
 )
