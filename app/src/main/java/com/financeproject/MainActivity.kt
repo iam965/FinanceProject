@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
         profitvm = ViewModelProvider(this, ProfitViewModel.ProfitViewModelFactory(application))[ProfitViewModel::class.java]
         setContent {
             FinanceProjectTheme {
-                MainScreen(mainvm)
+                MainScreen(mainvm, lossvm , profitvm )
             }
         }
     }
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
 //мб окно добавления доход/расход
 
 @Composable
-fun MainScreen(mainvm: MainViewModel){
+fun MainScreen(mainvm: MainViewModel,lossvm: LossViewModel,profitvm: ProfitViewModel){
     val navController = rememberNavController()
     var animationSideRight =true
     val navigationBar: FinanceNavigationBar = FinanceNavigationBar()
@@ -86,7 +86,7 @@ fun MainScreen(mainvm: MainViewModel){
                     }
                 ) {
                     animationSideRight = true
-                    IncomeScreen()
+                    IncomeScreen(profitvm)
 
                 }
                 composable(
@@ -130,7 +130,7 @@ fun MainScreen(mainvm: MainViewModel){
                     }
                 ) {
                     animationSideRight = false
-                    ExpenseScreen();
+                    ExpenseScreen(lossvm)
 
                 }
             }
