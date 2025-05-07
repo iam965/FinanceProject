@@ -1,64 +1,57 @@
 package com.financeproject.ui.screens
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.financeproject.data.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import kotlinx.coroutines.flow.filter
 import java.text.SimpleDateFormat
 import java.util.*
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(mainvm: FinanceViewModel) {
+fun HomeScreen(financevm: FinanceViewModel) {
     // Временные данные (замените потом на ViewModel)
-    var operations by remember { mutableStateOf(listOf(
-        FinanceOperation("Зарплата", 50000.0, true, Date()),
-        FinanceOperation("Аренда", 25000.0, false, Date()),
-        FinanceOperation("Продукты", 5000.0, false, Date())
-    )) }
+    val allLoss = financevm.allLoss
+    val allProfit = financevm.allProfit
 
     // Вычисляемые значения
-    val (balance, totalIncome, totalExpense) = remember(operations) {
-        val income = operations.filter { it.isIncome }.sumOf { it.amount }
-        val expense = operations.filter { !it.isIncome }.sumOf { it.amount }
-        Triple(income - expense, income, expense)
-    }
+    //var profit = allProfit.value.sumOf { it.value }
+    var profit = 8999.5
+    //var loss = allLoss.value.sumOf { it.value }
+    var loss = 7770.0
+    var balance = profit - loss
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Главная", color = Color.White) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(Color(0xFFF5F5F5))
-        ) {
-            // 1. Карточка баланса
-            BalanceCard(balance)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5F5F5))
+    ) {
+        // 1. Карточка баланса
+        BalanceCard(balance)
 
-            // 2. Статистика доходов/расходов
-            IncomeExpenseStats(totalIncome, totalExpense)
+        // 2. Статистика доходов/расходов
+        IncomeExpenseStats(profit, loss)
 
-            // 3. Список последних операций
-            RecentOperations(operations)
-        }
+        // 3. Список последних операций
+        RecentOperations(allProfit.value)
     }
 }
 
@@ -80,7 +73,7 @@ private fun BalanceCard(balance: Double) {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.padding(24.dp).fillMaxWidth()
         ) {
             Text(
                 "Общий баланс",
@@ -102,13 +95,34 @@ private fun BalanceCard(balance: Double) {
 @Composable
 private fun IncomeExpenseStats(income: Double, expense: Double) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Bottom
     ) {
-        StatCard("Доходы", income, Color(0xFF4CAF50))
-        StatCard("Расходы", expense, Color(0xFFF44336))
+        Diagram(value = expense, sum = income + expense, color = Color(0xFFF44336), text = "Расходы")
+        Diagram(value = income, sum = income + expense, color = Color(0xFF4CAF50), text = "Доходы")
+    }
+}
+
+@Composable
+private fun Diagram(value: Double, sum: Double, color: Color, text: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .height((150 * value / sum).dp)
+                .width(30.dp)
+                .background(
+                    color = color,
+                    shape = AbsoluteRoundedCornerShape(
+                        topLeft = 7.dp,
+                        topRight = 7.dp,
+                        bottomLeft = 0.dp,
+                        bottomRight = 0.dp
+                    )
+                ),
+        ) {
+        }
+        StatCard(text, value, color)
     }
 }
 
@@ -118,7 +132,9 @@ private fun StatCard(title: String, value: Double, color: Color) {
         modifier = Modifier.width(150.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(title, color = Color.Gray)
@@ -134,7 +150,7 @@ private fun StatCard(title: String, value: Double, color: Color) {
 
 // Компонент 3: Список операций
 @Composable
-private fun RecentOperations(operations: List<FinanceOperation>) {
+private fun RecentOperations(operations: List<Operation>) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -154,7 +170,7 @@ private fun RecentOperations(operations: List<FinanceOperation>) {
 }
 
 @Composable
-private fun OperationItem(operation: FinanceOperation) {
+private fun OperationItem(operation: Operation) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,8 +193,8 @@ private fun OperationItem(operation: FinanceOperation) {
                 )
             }
             Text(
-                "${if (operation.isIncome) "+" else "-"}${"%.2f ₽".format(operation.amount)}",
-                color = if (operation.isIncome) Color(0xFF4CAF50) else Color(0xFFF44336),
+                "${if (operation.isprofit) "+" else "-"}${"%.2f ₽".format(operation.value)}",
+                color = if (operation.isprofit) Color(0xFF4CAF50) else Color(0xFFF44336),
                 fontWeight = FontWeight.Medium
             )
         }

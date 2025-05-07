@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        financevm = ViewModelProvider(this, FinanceViewModel.MainViewModelFactory(application))[FinanceViewModel::class.java]
+        financevm = ViewModelProvider(this, FinanceViewModel.FinanceViewModelFactory(application))[FinanceViewModel::class.java]
         setContent {
             FinanceProjectTheme {
                 MainScreen(financevm)

@@ -5,11 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(version = 1,
-    entities = [Category::class,
-    Operation::class])
+@Database(version = 2,
+    entities = [Operation::class])
 abstract class FinanceDataBase : RoomDatabase(){
-    abstract fun getCategoryDao(): CategoryDao
     abstract fun getOperationDao(): OperationDao
 
     companion object{
