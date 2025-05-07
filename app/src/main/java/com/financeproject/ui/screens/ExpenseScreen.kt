@@ -11,8 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
+import androidx.room.util.TableInfo
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import java.nio.file.WatchEvent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,9 +36,10 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
     LaunchedEffect(lossEntries) {
         totalLoss = lossEntries.sumOf { it.amount }
     }
+    Column(
+    ) {
+        Box {
 
-    Scaffold(
-        topBar = {
             TopAppBar(
                 title = { Text("Расходы") },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -43,21 +47,12 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Добавить расход")
-            }
         }
-    ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xfff5f5f5))
-                .padding(innerPadding)
         ) {
             Card(
                 modifier = Modifier
@@ -82,30 +77,41 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                     )
                 }
             }
+            ExtendedFloatingActionButton (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+
+                icon = {Icon(Icons.Default.Add, contentDescription = "add")},
+                text = {Text("Добавить")},
+                onClick = {showDialog=true}
+            )
 
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(16.dp)
             ) {
                 items(lossEntries) { entry ->
                     LossItem(entry)
                 }
             }
         }
-    }
 
-    if (showDialog) {
-        LossDialog(
-            onDismiss = { showDialog = false },
-            onAddLoss = { amount, description ->
-                lossEntries = lossEntries + LossEntry(
-                    amount = amount,
-                    description = description
-                )
-                showDialog = false
-            }
-        )
+
+
+        if (showDialog) {
+            LossDialog(
+                onDismiss = { showDialog = false },
+                onAddLoss = { amount, description ->
+                    lossEntries = lossEntries + LossEntry(
+                        amount = amount,
+                        description = description
+                    )
+                    showDialog = false
+                }
+            )
+        }
     }
 }
 

@@ -35,8 +35,9 @@ fun IncomeScreen(financevm: FinanceViewModel) {
         totalIncome = incomeEntries.sumOf { it.amount }
     }
 
-    Scaffold(
-        topBar = {
+    Column {
+        Box {
+
             TopAppBar(
                 title = { Text("Доходы") },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -44,21 +45,12 @@ fun IncomeScreen(financevm: FinanceViewModel) {
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Добавить доход")
-            }
         }
-    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xfff5f5f5))
-                .padding(innerPadding)
+
         ) {
             Card(
                 modifier = Modifier
@@ -83,31 +75,42 @@ fun IncomeScreen(financevm: FinanceViewModel) {
                     )
                 }
             }
+            ExtendedFloatingActionButton (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
 
+                icon = {Icon(Icons.Default.Add, contentDescription = "add")},
+                text = {Text("Добавить доход")},
+                onClick = {showDialog=true}
+            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding( 16.dp)
             ) {
                 items(incomeEntries) { entry ->
                     IncomeItem(entry)
                 }
             }
         }
+
+        if (showDialog) {
+            IncomeDialog(
+                onDismiss = { showDialog = false },
+                onAddIncome = { amount, description ->
+                    incomeEntries = incomeEntries + IncomeEntry(
+                        amount = amount,
+                        description = description
+                    )
+                    showDialog = false
+                }
+            )
+        }
+
     }
 
-    if (showDialog) {
-        IncomeDialog(
-            onDismiss = { showDialog = false },
-            onAddIncome = { amount, description ->
-                incomeEntries = incomeEntries + IncomeEntry(
-                    amount = amount,
-                    description = description
-                )
-                showDialog = false
-            }
-        )
-    }
+
 }
 
 @Composable
