@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.financeproject.ui.viewmodels.LossViewModel
+import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +25,7 @@ data class LossEntry(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseScreen(lossvm: LossViewModel) {
+fun ExpenseScreen(financevm: FinanceViewModel) {
     var lossEntries by remember { mutableStateOf(listOf<LossEntry>()) }
     var showDialog by remember { mutableStateOf(false) }
     var totalLoss by remember { mutableStateOf(0.0) }

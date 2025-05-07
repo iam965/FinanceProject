@@ -1,6 +1,5 @@
 package com.financeproject
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,22 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,24 +20,18 @@ import androidx.navigation.compose.rememberNavController
 import com.financeproject.ui.navigation.*
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.screens.*
-import com.financeproject.ui.viewmodels.LossViewModel
-import com.financeproject.ui.viewmodels.MainViewModel
-import com.financeproject.ui.viewmodels.ProfitViewModel
+import com.financeproject.ui.viewmodels.FinanceViewModel
 
 class MainActivity : ComponentActivity() {
-    private lateinit var mainvm: MainViewModel
-    private lateinit var lossvm: LossViewModel
-    private lateinit var profitvm: ProfitViewModel
+    private lateinit var financevm: FinanceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        mainvm = ViewModelProvider(this, MainViewModel.MainViewModelFactory(application))[MainViewModel::class.java]
-        lossvm = ViewModelProvider(this, LossViewModel.LossViewModelFactory(application))[LossViewModel::class.java]
-        profitvm = ViewModelProvider(this, ProfitViewModel.ProfitViewModelFactory(application))[ProfitViewModel::class.java]
+        financevm = ViewModelProvider(this, FinanceViewModel.MainViewModelFactory(application))[FinanceViewModel::class.java]
         setContent {
             FinanceProjectTheme {
-                MainScreen(mainvm, lossvm , profitvm )
+                MainScreen(financevm)
             }
         }
     }
@@ -60,10 +43,10 @@ class MainActivity : ComponentActivity() {
 //мб окно добавления доход/расход
 
 @Composable
-fun MainScreen(mainvm: MainViewModel,lossvm: LossViewModel,profitvm: ProfitViewModel){
+fun MainScreen(financevm: FinanceViewModel){
     val navController = rememberNavController()
     var animationSideRight =true
-    val navigationBar: FinanceNavigationBar = FinanceNavigationBar()
+    val navigationBar = FinanceNavigationBar()
 
     Scaffold(
         bottomBar = { navigationBar.BottomNavBar(navController) },
@@ -86,7 +69,7 @@ fun MainScreen(mainvm: MainViewModel,lossvm: LossViewModel,profitvm: ProfitViewM
                     }
                 ) {
                     animationSideRight = true
-                    IncomeScreen(profitvm)
+                    IncomeScreen(financevm)
 
                 }
                 composable(
@@ -114,7 +97,7 @@ fun MainScreen(mainvm: MainViewModel,lossvm: LossViewModel,profitvm: ProfitViewM
                         }
                     }
                 ) {
-                    HomeScreen(mainvm)
+                    HomeScreen(financevm)
                 }
                 composable(
                     NavRoutes.Expense.route,
@@ -130,7 +113,7 @@ fun MainScreen(mainvm: MainViewModel,lossvm: LossViewModel,profitvm: ProfitViewM
                     }
                 ) {
                     animationSideRight = false
-                    ExpenseScreen(lossvm)
+                    ExpenseScreen(financevm);
 
                 }
             }

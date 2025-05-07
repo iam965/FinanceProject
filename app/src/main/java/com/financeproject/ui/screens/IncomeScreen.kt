@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.financeproject.ui.viewmodels.ProfitViewModel
+import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +26,7 @@ data class IncomeEntry(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomeScreen(profitvm: ProfitViewModel) {
+fun IncomeScreen(financevm: FinanceViewModel) {
     var incomeEntries by remember { mutableStateOf(listOf<IncomeEntry>()) }
     var showDialog by remember { mutableStateOf(false) }
     var totalIncome by remember { mutableStateOf(0.0) }
