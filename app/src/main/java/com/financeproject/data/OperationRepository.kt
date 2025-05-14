@@ -1,6 +1,7 @@
 package com.financeproject.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
 class OperationRepository(private val operationDao: OperationDao) {
     val allOperations: Flow<List<Operation>> = operationDao.getAllOperations()
@@ -17,5 +18,9 @@ class OperationRepository(private val operationDao: OperationDao) {
 
     suspend fun deleteOperation(operation: Operation){
         operationDao.deleteOperation(operation)
+    }
+
+    suspend fun resetData(){
+        operationDao.resetData()
     }
 }

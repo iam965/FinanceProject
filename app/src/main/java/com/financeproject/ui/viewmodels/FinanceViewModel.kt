@@ -1,6 +1,9 @@
 package com.financeproject.ui.viewmodels
 
 import android.app.Application
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,15 +11,21 @@ import androidx.lifecycle.viewModelScope
 import com.financeproject.data.FinanceDataBase
 import com.financeproject.data.Operation
 import com.financeproject.data.OperationRepository
+import com.financeproject.ui.state.UIState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 
-class FinanceViewModel(application: Application): AndroidViewModel(application) {
+class FinanceViewModel(application: Application, private val UiState: UIState): AndroidViewModel(application) {
     private val operationRepository: OperationRepository
     val allProfit: StateFlow<List<Operation>>
     val allLoss: StateFlow<List<Operation>>
+    val allOperations: StateFlow<List<Operation>>
+    private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
+    val isDarkTheme: State<Boolean> = _isDarkTheme
 
     init{
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
@@ -31,21 +40,42 @@ class FinanceViewModel(application: Application): AndroidViewModel(application) 
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
+        allOperations = operationRepository.allOperations.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
     }
 
-/*    fun changeTheme(){
-        try {
-            uiState.value.isDarkTheme = !uiState.value.isDarkTheme
-            uiState.value.changeTheme()
-        } catch (e: Exception) {
-        }
-    }*/
+    fun changeTheme(){
+        _isDarkTheme.value = !_isDarkTheme.value
+        UiState.changeTheme()
+    }
 
-    class FinanceViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    fun resetData(){
+        viewModelScope.launch {
+            operationRepository.resetData()
+        }
+    }
+
+    fun insertOperation(operation: Operation){
+        viewModelScope.launch(Dispatchers.IO) {
+            operationRepository.insertOperation(operation)
+        }
+    }
+
+    fun deleteOperation(operation: Operation){
+        viewModelScope.launch(Dispatchers.IO){
+            operationRepository.deleteOperation(operation)
+        }
+    }
+
+    class FinanceViewModelFactory(private val application: Application, UiState: UIState) : ViewModelProvider.Factory {
+        private val uiState = UiState
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(FinanceViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return FinanceViewModel(application) as T
+                return FinanceViewModel(application, uiState) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

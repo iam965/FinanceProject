@@ -26,4 +26,7 @@ interface OperationDao {
 
     @Delete
     fun deleteOperation(operation: Operation)
+
+    @Query("DELETE FROM operations")
+    fun resetData()
 }

@@ -1,5 +1,6 @@
 package com.financeproject.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,37 +8,35 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.financeproject.data.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class IncomeEntry(
+/*data class IncomeEntry(
     val id: String = UUID.randomUUID().toString(),
     val amount: Double,
     val description: String,
     val date: Date = Date()
-)
+)*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IncomeScreen(financevm: FinanceViewModel) {
-    var incomeEntries by remember { mutableStateOf(listOf<IncomeEntry>()) }
-    var showDialog by remember { mutableStateOf(false) }
-    var totalIncome by remember { mutableStateOf(0.0) }
-
-    LaunchedEffect(incomeEntries) {
-        totalIncome = incomeEntries.sumOf { it.amount }
-    }
+    val allIncome by financevm.allProfit.collectAsState()
+    var showAddDialog by remember { mutableStateOf(false) }
+    var showRemoveDialog by remember { mutableStateOf(false) }
+    var totalIncome = allIncome.sumOf { it.value }
 
     Column {
         Box {
-
             TopAppBar(
                 title = { Text("Доходы") },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -82,39 +81,38 @@ fun IncomeScreen(financevm: FinanceViewModel) {
 
                 icon = {Icon(Icons.Default.Add, contentDescription = "add")},
                 text = {Text("Добавить доход")},
-                onClick = {showDialog=true}
+                onClick = {showAddDialog=true}
             )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding( 16.dp)
             ) {
-                items(incomeEntries) { entry ->
-                    IncomeItem(entry)
+                items(allIncome.reversed()) { entry ->
+                    IncomeItem(entry, onButton = {showRemoveDialog = true})
+                    if (showRemoveDialog){
+                        RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
+                    }
                 }
             }
         }
 
-        if (showDialog) {
+        if (showAddDialog) {
             IncomeDialog(
-                onDismiss = { showDialog = false },
+                onDismiss = { showAddDialog = false },
                 onAddIncome = { amount, description ->
-                    incomeEntries = incomeEntries + IncomeEntry(
-                        amount = amount,
-                        description = description
-                    )
-                    showDialog = false
+                    financevm.insertOperation(Operation(id = 0, description = description, value = amount, isprofit = true, date = "01.01.25"))
+                    showAddDialog = false
                 }
             )
         }
-
     }
 
 
 }
 
 @Composable
-private fun IncomeItem(entry: IncomeEntry) {
+private fun IncomeItem(entry: Operation, onButton: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,16 +131,21 @@ private fun IncomeItem(entry: IncomeEntry) {
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(entry.date),
+                    text = entry.date,
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
             }
-            Text(
-                text = "+%.2f ₽".format(entry.amount),
-                style = MaterialTheme.typography.titleMedium,
-                color = Color(0xFF4CAF50)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically){
+                Text(
+                    text = "+%.2f ₽".format(entry.value),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF4CAF50)
+                )
+                IconButton(onClick = onButton) {
+                    Icon(Icons.Default.Delete, contentDescription = "delete")
+                }
+            }
         }
     }
 }
@@ -196,6 +199,35 @@ private fun IncomeDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("Отмена")
+            }
+        }
+    )
+}
+
+@Composable
+private fun RemoveDialog(
+    onDismiss: () -> Unit,
+    onRemoveIncome: () -> Unit,
+
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Удалить") },
+        text = {
+            Text("Вы действительно хотите удалить операцию?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick =
+                    onRemoveIncome
+
+            ) {
+                Text("Да")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Нет")
             }
         }
     )

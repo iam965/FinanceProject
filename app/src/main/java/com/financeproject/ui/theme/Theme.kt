@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.financeproject.ui.viewmodels.FinanceViewModel
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -35,12 +36,10 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun FinanceProjectTheme(
-    darkTheme: Boolean = false,
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    financeViewModel: FinanceViewModel,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme){
+    val colorScheme = if (financeViewModel.isDarkTheme.value){
         DarkColorScheme
     } else {
         LightColorScheme

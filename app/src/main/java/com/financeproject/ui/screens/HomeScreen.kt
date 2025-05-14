@@ -28,15 +28,15 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(financevm: FinanceViewModel) {
-    // Временные данные (замените потом на ViewModel)
-    val allLoss = financevm.allLoss
-    val allProfit = financevm.allProfit
+    val allLoss = financevm.allLoss.collectAsState()
+    val allProfit = financevm.allProfit.collectAsState()
+    val allOperations = financevm.allOperations.collectAsState()
 
     // Вычисляемые значения
     //var profit = allProfit.value.sumOf { it.value }
-    var profit = 8999.5
+    val profit = allProfit.value.sumOf{ it.value}
     //var loss = allLoss.value.sumOf { it.value }
-    var loss = 7770.0
+    val loss = allLoss.value.sumOf{it.value}
     var balance = profit - loss
 
     Column(
@@ -51,17 +51,11 @@ fun HomeScreen(financevm: FinanceViewModel) {
         IncomeExpenseStats(profit, loss)
 
         // 3. Список последних операций
-        RecentOperations(allProfit.value)
+        RecentOperations(allOperations.value)
     }
 }
 
 // Временная модель данных (замените на свою)
-data class FinanceOperation(
-    val description: String,
-    val amount: Double,
-    val isIncome: Boolean,
-    val date: Date = Date()
-)
 
 // Компонент 1: Карточка баланса
 @Composable
@@ -162,7 +156,7 @@ private fun RecentOperations(operations: List<Operation>) {
         )
 
         LazyColumn {
-            items(operations.take(5)) { operation ->
+            items(operations.takeLast(5)) { operation ->
                 OperationItem(operation)
             }
         }
@@ -177,7 +171,7 @@ private fun OperationItem(operation: Operation) {
             .padding(vertical = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -187,7 +181,7 @@ private fun OperationItem(operation: Operation) {
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    SimpleDateFormat("dd.MM.yyyy").format(operation.date),
+                    operation.date,
                     color = Color.Gray,
                     fontSize = 12.sp
                 )

@@ -56,7 +56,6 @@ class FinanceNavigationBar(){
                             launchSingleTop=true
                             restoreState=true
                         }
-                        currentScreen = navItem.title
                     },
                     icon = {
                         Icon(painter = BitmapPainter(ImageBitmap.imageResource(navItem.image)),

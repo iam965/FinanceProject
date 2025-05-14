@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,32 +16,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.room.util.TableInfo
+import com.financeproject.data.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.nio.file.WatchEvent
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class LossEntry(
-    val id: String = UUID.randomUUID().toString(),
-    val amount: Double,
-    val description: String,
-    val date: Date = Date()
-)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseScreen(financevm: FinanceViewModel) {
-    var lossEntries by remember { mutableStateOf(listOf<LossEntry>()) }
-    var showDialog by remember { mutableStateOf(false) }
-    var totalLoss by remember { mutableStateOf(0.0) }
+    val allLoss by financevm.allLoss.collectAsState()
+    var showAddDialog by remember { mutableStateOf(false) }
+    var showRemoveDialog by remember { mutableStateOf(false) }
+    var totalLoss = allLoss.sumOf { it.value }
 
-    LaunchedEffect(lossEntries) {
-        totalLoss = lossEntries.sumOf { it.amount }
-    }
-    Column(
-    ) {
+    Column {
         Box {
-
             TopAppBar(
                 title = { Text("Расходы") },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -48,11 +42,11 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                 )
             )
         }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xfff5f5f5))
+
         ) {
             Card(
                 modifier = Modifier
@@ -66,7 +60,7 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Общий расход",
+                        text = "Общий доход",
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.Gray
                     )
@@ -83,40 +77,39 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                     .padding(10.dp),
 
                 icon = {Icon(Icons.Default.Add, contentDescription = "add")},
-                text = {Text("Добавить")},
-                onClick = {showDialog=true}
+                text = {Text("Добавить расход")},
+                onClick = {showAddDialog=true}
             )
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding( 16.dp)
             ) {
-                items(lossEntries) { entry ->
-                    LossItem(entry)
+                items(allLoss.reversed()) { entry ->
+                    LossItem(entry, onButton = {showRemoveDialog = true})
+                    if (showRemoveDialog){
+                        RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
+                    }
                 }
             }
         }
 
-
-
-        if (showDialog) {
+        if (showAddDialog) {
             LossDialog(
-                onDismiss = { showDialog = false },
-                onAddLoss = { amount, description ->
-                    lossEntries = lossEntries + LossEntry(
-                        amount = amount,
-                        description = description
-                    )
-                    showDialog = false
+                onDismiss = { showAddDialog = false },
+                onAddIncome = { amount, description ->
+                    financevm.insertOperation(Operation(id = 0, description = description, value = amount, isprofit = false, date = "01.01.25"))
+                    showAddDialog = false
                 }
             )
         }
     }
+
+
 }
 
 @Composable
-private fun LossItem(entry: LossEntry) {
+private fun LossItem(entry: Operation, onButton: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,16 +128,21 @@ private fun LossItem(entry: LossEntry) {
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(entry.date),
+                    text = entry.date,
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
             }
-            Text(
-                text = "-%.2f ₽".format(entry.amount),
-                style = MaterialTheme.typography.titleMedium,
-                color = Color(0xFFF44336)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically){
+                Text(
+                    text = "+%.2f ₽".format(entry.value),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFFF44336)
+                )
+                IconButton(onClick = onButton) {
+                    Icon(Icons.Default.Delete, contentDescription = "delete")
+                }
+            }
         }
     }
 }
@@ -153,7 +151,7 @@ private fun LossItem(entry: LossEntry) {
 @Composable
 private fun LossDialog(
     onDismiss: () -> Unit,
-    onAddLoss: (Double, String) -> Unit
+    onAddIncome: (Double, String) -> Unit
 ) {
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -168,6 +166,9 @@ private fun LossDialog(
                     onValueChange = { amount = it },
                     label = { Text("Сумма") },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardOptions.Default.keyboardType
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -185,7 +186,7 @@ private fun LossDialog(
                 onClick = {
                     val amountValue = amount.toDoubleOrNull() ?: 0.0
                     if (amountValue > 0 && description.isNotBlank()) {
-                        onAddLoss(amountValue, description)
+                        onAddIncome(amountValue, description)
                     }
                 }
             ) {
@@ -195,6 +196,35 @@ private fun LossDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("Отмена")
+            }
+        }
+    )
+}
+
+@Composable
+private fun RemoveDialog(
+    onDismiss: () -> Unit,
+    onRemoveIncome: () -> Unit,
+
+    ) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Удалить") },
+        text = {
+            Text("Вы действительно хотите удалить операцию?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick =
+                onRemoveIncome
+
+            ) {
+                Text("Да")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Нет")
             }
         }
     )
