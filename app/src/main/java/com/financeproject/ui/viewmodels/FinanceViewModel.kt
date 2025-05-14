@@ -53,7 +53,7 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
     }
 
     fun resetData(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             operationRepository.resetData()
         }
     }
