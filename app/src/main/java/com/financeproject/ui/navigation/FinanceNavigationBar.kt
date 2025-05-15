@@ -1,9 +1,15 @@
 package com.financeproject.ui.navigation
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -17,6 +23,7 @@ import com.financeproject.R
 
 class FinanceNavigationBar(){
     private val items: List<BarItem>
+    private val topBarNav: BarItem
     var currentScreen: String = "Home"
     var targetScreen: String = "Home"
 
@@ -38,11 +45,12 @@ class FinanceNavigationBar(){
                 route = "income"
             )
         )
+        topBarNav = BarItem(title = "Settings", image = R.drawable.settings, route = "settings")
     }
 
     @Composable
     fun BottomNavBar(navController: NavController) {
-        NavigationBar {
+        NavigationBar() {
             val backStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute=backStackEntry.value?.destination?.route
 
@@ -67,5 +75,34 @@ class FinanceNavigationBar(){
             }
 
         }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun TopBar(navController: NavController, txt: String) {
+        CenterAlignedTopAppBar(colors = TopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface
+        ), title = { Text(text = txt) },
+            navigationIcon = {
+                IconButton(onClick = {
+                    targetScreen = topBarNav.title
+                    navController.navigate(topBarNav.route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }) {
+                    Icon(
+                        painter = BitmapPainter(ImageBitmap.imageResource(R.drawable.settings)),
+                        contentDescription = "Settings",
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            }
+        )
     }
 }

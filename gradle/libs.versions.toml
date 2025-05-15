@@ -11,6 +11,7 @@ composeBom = "2024.04.01"
 roomCommon = "2.6.1"
 roomRuntimeAndroid = "2.7.0-rc02"
 navigationCompose="2.7.7"
+uiTextGoogleFonts = "1.8.1"
 
 [libraries]
 accompanist-navigation-animation_z = { module = "com.google.accompanist:accompanist-navigation-animation)" }
@@ -31,6 +32,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 
 [plugins]

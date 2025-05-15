@@ -1,48 +1,45 @@
 package com.financeproject.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.financeproject.data.Operation
-import com.financeproject.ui.viewmodels.FinanceViewModel
-import kotlinx.coroutines.flow.filter
-import java.text.SimpleDateFormat
-import java.util.*
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(financevm: FinanceViewModel) {
-    val allLoss = financevm.allLoss.collectAsState()
-    val allProfit = financevm.allProfit.collectAsState()
-    val allOperations = financevm.allOperations.collectAsState()
+fun HomeScreen(allProfit:State<List<Operation>>, allLoss: State<List<Operation>>, allOperations: State<List<Operation>>) {
 
     // Вычисляемые значения
-    //var profit = allProfit.value.sumOf { it.value }
-    val profit = allProfit.value.sumOf{ it.value}
-    //var loss = allLoss.value.sumOf { it.value }
-    val loss = allLoss.value.sumOf{it.value}
+    var profit = allProfit.value.sumOf { it.value }
+    var loss = allLoss.value.sumOf { it.value }
     var balance = profit - loss
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
     ) {
         // 1. Карточка баланса
         BalanceCard(balance)
@@ -71,15 +68,13 @@ private fun BalanceCard(balance: Double) {
         ) {
             Text(
                 "Общий баланс",
-                color = Color.Gray,
                 fontSize = 16.sp
             )
             Spacer(Modifier.height(8.dp))
             Text(
                 "%.2f ₽".format(balance),
                 color = if (balance >= 0) Color(0xFF4CAF50) else Color(0xFFF44336),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 28.sp
             )
         }
     }
@@ -131,7 +126,7 @@ private fun StatCard(title: String, value: Double, color: Color) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(title, color = Color.Gray)
+            Text(title)
             Spacer(Modifier.height(4.dp))
             Text(
                 "%.2f ₽".format(value),
@@ -182,7 +177,6 @@ private fun OperationItem(operation: Operation) {
                 )
                 Text(
                     operation.date,
-                    color = Color.Gray,
                     fontSize = 12.sp
                 )
             }

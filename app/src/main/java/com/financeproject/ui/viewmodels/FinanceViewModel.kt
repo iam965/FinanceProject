@@ -3,6 +3,7 @@ package com.financeproject.ui.viewmodels
 import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,10 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
     val allOperations: StateFlow<List<Operation>>
     private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
     val isDarkTheme: State<Boolean> = _isDarkTheme
+    private var _profitValue: MutableState<Double>
+    val profitValue:State<Double>
+    private val _lossValue: MutableState<Double>
+    val lossValue:State<Double>
 
     init{
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
@@ -45,6 +50,10 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
+        _profitValue = mutableDoubleStateOf(0.0)
+        profitValue = _profitValue
+        _lossValue = mutableDoubleStateOf(0.0)
+        lossValue = _lossValue
     }
 
     fun changeTheme(){

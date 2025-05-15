@@ -10,23 +10,26 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.financeproject.ui.navigation.*
-import com.financeproject.ui.theme.FinanceProjectTheme
-import com.financeproject.ui.screens.*
+import com.financeproject.ui.navigation.FinanceNavigationBar
+import com.financeproject.ui.navigation.NavRoutes
+import com.financeproject.ui.screens.ExpenseScreen
+import com.financeproject.ui.screens.HomeScreen
+import com.financeproject.ui.screens.IncomeScreen
+import com.financeproject.ui.screens.Settings
 import com.financeproject.ui.state.UIState
+import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.viewmodels.FinanceViewModel
 
 class MainActivity : ComponentActivity() {
@@ -53,14 +56,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(financevm: FinanceViewModel){
     val navController = rememberNavController()
-    var animationSideRight =true
     val navigationBar = FinanceNavigationBar()
+    var title by remember { mutableStateOf("Home") }
+    val allLoss = financevm.allLoss.collectAsState()
+    val allProfit = financevm.allProfit.collectAsState()
+    val allOperations = financevm.allOperations.collectAsState()
 
     Scaffold(
-        bottomBar = { navigationBar.BottomNavBar(navController) },
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.primary,
-        floatingActionButton = { FloatingActionButton(onClick = {navController.navigate("settings")}){} }
+        topBar = { navigationBar.TopBar(navController, title) },
+        bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController, startDestination = NavRoutes.Home.route) {
@@ -78,9 +82,8 @@ fun MainScreen(financevm: FinanceViewModel){
                     }
                 ) {
                     navigationBar.currentScreen = "Income"
-                    animationSideRight = true
                     IncomeScreen(financevm)
-
+                    title = "Доходы"
                 }
                 composable(
                     NavRoutes.Home.route,
@@ -107,7 +110,8 @@ fun MainScreen(financevm: FinanceViewModel){
                         }
                     }
                 ) {
-                    HomeScreen(financevm)
+                    HomeScreen(allOperations = allOperations, allProfit = allProfit, allLoss = allLoss)
+                    title = "Главная"
                 }
                 composable(
                     NavRoutes.Expense.route,
@@ -122,13 +126,15 @@ fun MainScreen(financevm: FinanceViewModel){
                             )
                     }
                 ) {
-                    animationSideRight = false
                     ExpenseScreen(financevm);
                     navigationBar.currentScreen = "Expense"
+                    title = "Расходы"
                 }
                 composable(NavRoutes.Settings.route)
                 {
+                    navigationBar.currentScreen = "Settings"
                     Settings(financevm)
+                    title = "Настройки"
                 }
             }
         }
