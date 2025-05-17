@@ -41,17 +41,12 @@ class MainActivity : ComponentActivity() {
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
         financevm = ViewModelProvider(this, FinanceViewModel.FinanceViewModelFactory(application, uiState))[FinanceViewModel::class.java]
         setContent {
-            FinanceProjectTheme(financevm) {
+            FinanceProjectTheme(financeViewModel = financevm){
                 MainScreen(financevm)
             }
         }
     }
 }
-
-//надо сделать main окно, которая встречает юзера
-//в main возможно диаграмма,э
-//окно истории
-//мб окно добавления доход/расход
 
 @Composable
 fun MainScreen(financevm: FinanceViewModel){

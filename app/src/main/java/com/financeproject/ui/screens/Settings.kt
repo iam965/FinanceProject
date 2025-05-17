@@ -4,11 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Card
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,7 +40,7 @@ fun Settings(financevm: FinanceViewModel){
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -56,7 +57,7 @@ fun Settings(financevm: FinanceViewModel){
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(4.dp)
                     .clickable { showResetDialog = true },
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -66,7 +67,7 @@ fun Settings(financevm: FinanceViewModel){
             }
         }
         if (showResetDialog){
-            ResetDialog(onReset = {financevm.resetData()}, onDismiss = {showResetDialog = false})
+            ResetDialog(onReset = {financevm.resetData(); showResetDialog = false}, onDismiss = {showResetDialog = false})
         }
     }
 }
