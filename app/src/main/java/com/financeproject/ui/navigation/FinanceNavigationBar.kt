@@ -89,7 +89,7 @@ class FinanceNavigationBar(){
         ), title = { Text(text = txt) },
             navigationIcon = {
                 IconButton(onClick = {
-                    targetScreen = topBarNav.title
+                    targetScreen = "Settings"
                     navController.navigate(topBarNav.route) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true

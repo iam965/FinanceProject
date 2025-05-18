@@ -1,6 +1,5 @@
 package com.financeproject.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -27,12 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.financeproject.data.Operation
 
-@SuppressLint("StateFlowValueCalledInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(allProfit:State<List<Operation>>, allLoss: State<List<Operation>>, allOperations: State<List<Operation>>) {
+fun HomeScreen(allProfit:State<List<Operation>>, allLoss: State<List<Operation>>, allOperations: State<List<Operation>>, valute: String) {
 
-    // Вычисляемые значения
     var profit = allProfit.value.sumOf { it.value }
     var loss = allLoss.value.sumOf { it.value }
     var balance = profit - loss
@@ -41,22 +36,16 @@ fun HomeScreen(allProfit:State<List<Operation>>, allLoss: State<List<Operation>>
         modifier = Modifier
             .fillMaxSize()
     ) {
-        // 1. Карточка баланса
-        BalanceCard(balance)
+        BalanceCard(balance, valute)
 
-        // 2. Статистика доходов/расходов
-        IncomeExpenseStats(profit, loss)
+        IncomeExpenseStats(profit, loss, valute)
 
-        // 3. Список последних операций
-        RecentOperations(allOperations.value)
+        RecentOperations(allOperations.value, valute)
     }
 }
 
-// Временная модель данных (замените на свою)
-
-// Компонент 1: Карточка баланса
 @Composable
-private fun BalanceCard(balance: Double) {
+private fun BalanceCard(balance: Double, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,7 +61,7 @@ private fun BalanceCard(balance: Double) {
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "%.2f ₽".format(balance),
+                "%.2f".format(balance) + valute,
                 color = if (balance >= 0) Color(0xFF4CAF50) else Color(0xFFF44336),
                 fontSize = 28.sp
             )
@@ -80,21 +69,20 @@ private fun BalanceCard(balance: Double) {
     }
 }
 
-// Компонент 2: Статистика
 @Composable
-private fun IncomeExpenseStats(income: Double, expense: Double) {
+private fun IncomeExpenseStats(income: Double, expense: Double, valute: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.Bottom
     ) {
-        Diagram(value = expense, sum = income + expense, color = Color(0xFFF44336), text = "Расходы")
-        Diagram(value = income, sum = income + expense, color = Color(0xFF4CAF50), text = "Доходы")
+        Diagram(value = expense, sum = income + expense, color = Color(0xFFF44336), text = "Расходы", valute)
+        Diagram(value = income, sum = income + expense, color = Color(0xFF4CAF50), text = "Доходы", valute)
     }
 }
 
 @Composable
-private fun Diagram(value: Double, sum: Double, color: Color, text: String) {
+private fun Diagram(value: Double, sum: Double, color: Color, text: String, valute: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Column(
             modifier = Modifier
@@ -111,12 +99,12 @@ private fun Diagram(value: Double, sum: Double, color: Color, text: String) {
                 ),
         ) {
         }
-        StatCard(text, value, color)
+        StatCard(text, value, color, valute)
     }
 }
 
 @Composable
-private fun StatCard(title: String, value: Double, color: Color) {
+private fun StatCard(title: String, value: Double, color: Color, valute: String) {
     Card(
         modifier = Modifier.width(150.dp)
     ) {
@@ -129,7 +117,7 @@ private fun StatCard(title: String, value: Double, color: Color) {
             Text(title)
             Spacer(Modifier.height(4.dp))
             Text(
-                "%.2f ₽".format(value),
+                text = "%.2f".format(value) + valute,
                 color = color,
                 fontWeight = FontWeight.Medium
             )
@@ -137,9 +125,8 @@ private fun StatCard(title: String, value: Double, color: Color) {
     }
 }
 
-// Компонент 3: Список операций
 @Composable
-private fun RecentOperations(operations: List<Operation>) {
+private fun RecentOperations(operations: List<Operation>, valute: String) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -152,14 +139,14 @@ private fun RecentOperations(operations: List<Operation>) {
 
         LazyColumn {
             items(operations.takeLast(5)) { operation ->
-                OperationItem(operation)
+                OperationItem(operation, valute)
             }
         }
     }
 }
 
 @Composable
-private fun OperationItem(operation: Operation) {
+private fun OperationItem(operation: Operation, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,7 +168,7 @@ private fun OperationItem(operation: Operation) {
                 )
             }
             Text(
-                "${if (operation.isprofit) "+" else "-"}${"%.2f ₽".format(operation.value)}",
+                "${if (operation.isprofit) "+" else "-"}${"%.2f".format(operation.value) + valute}",
                 color = if (operation.isprofit) Color(0xFF4CAF50) else Color(0xFFF44336),
                 fontWeight = FontWeight.Medium
             )

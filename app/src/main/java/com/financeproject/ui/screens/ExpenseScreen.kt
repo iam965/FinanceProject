@@ -1,5 +1,7 @@
 package com.financeproject.ui.screens
 
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +18,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,11 +37,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.financeproject.data.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import java.util.Locale
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseScreen(financevm: FinanceViewModel) {
+fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
     val allLoss by financevm.allLoss.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
     var showRemoveDialog by remember { mutableStateOf(false) }
@@ -67,7 +67,8 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
                         text = "Общий доход"
                     )
                     Text(
-                        text = "%.2f ₽".format(totalLoss),
+                        text = "%.2f".format(totalLoss) + valute,
+                        style = MaterialTheme.typography.headlineMedium,
                         color = Color(0xFFF44336)
                     )
                 }
@@ -84,10 +85,10 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 16.dp)
+                    .padding(16.dp)
             ) {
                 items(allLoss.reversed()) { entry ->
-                    LossItem(entry, onButton = {showRemoveDialog = true})
+                    LossItem(entry, onButton = {showRemoveDialog = true}, valute = valute)
                     if (showRemoveDialog){
                         RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
                     }
@@ -99,7 +100,17 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
             LossDialog(
                 onDismiss = { showAddDialog = false },
                 onAddIncome = { amount, description ->
-                    financevm.insertOperation(Operation(id = 0, description = description, value = amount, isprofit = false, date = "01.01.25"))
+                    financevm.insertOperation(
+                        Operation(
+                            id = 0,
+                            description = description,
+                            value = amount,
+                            isprofit = false,
+                            date = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(
+                                Calendar.getInstance()
+                            )
+                        )
+                    )
                     showAddDialog = false
                 }
             )
@@ -110,7 +121,7 @@ fun ExpenseScreen(financevm: FinanceViewModel) {
 }
 
 @Composable
-private fun LossItem(entry: Operation, onButton: () -> Unit) {
+private fun LossItem(entry: Operation, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +146,7 @@ private fun LossItem(entry: Operation, onButton: () -> Unit) {
             }
             Row(verticalAlignment = Alignment.CenterVertically){
                 Text(
-                    text = "+%.2f ₽".format(entry.value),
+                    text = "+%.2f".format(entry.value) + valute,
                     color = Color(0xFFF44336)
                 )
                 IconButton(onClick = onButton) {

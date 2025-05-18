@@ -27,10 +27,7 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
     val allOperations: StateFlow<List<Operation>>
     private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
     val isDarkTheme: State<Boolean> = _isDarkTheme
-    private var _profitValue: MutableState<Double>
-    val profitValue:State<Double>
-    private val _lossValue: MutableState<Double>
-    val lossValue:State<Double>
+    private val _valute: MutableState<String?> = mutableStateOf(UiState.selectedValute)
 
     init{
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
@@ -50,15 +47,21 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
-        _profitValue = mutableDoubleStateOf(0.0)
-        profitValue = _profitValue
-        _lossValue = mutableDoubleStateOf(0.0)
-        lossValue = _lossValue
+
     }
 
     fun changeTheme(){
         _isDarkTheme.value = !_isDarkTheme.value
         UiState.changeTheme()
+    }
+
+    fun changeValute(valute: String){
+        _valute.value = valute
+        UiState.changeValute(valute)
+    }
+
+    fun getValute(): String{
+        return _valute.value.toString()
     }
 
     fun resetData(){

@@ -1,5 +1,7 @@
 package com.financeproject.ui.screens
 
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,17 +38,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.financeproject.data.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import java.util.Locale
 
-/*data class IncomeEntry(
-    val id: String = UUID.randomUUID().toString(),
-    val amount: Double,
-    val description: String,
-    val date: Date = Date()
-)*/
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomeScreen(financevm: FinanceViewModel) {
+fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
     val allIncome by financevm.allProfit.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
     var showRemoveDialog by remember { mutableStateOf(false) }
@@ -74,7 +69,7 @@ fun IncomeScreen(financevm: FinanceViewModel) {
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
-                        text = "%.2f ₽".format(totalIncome),
+                        text = "%.2f".format(totalIncome) + valute,
                         style = MaterialTheme.typography.headlineMedium,
                         color = Color(0xFF4CAF50)
                     )
@@ -92,10 +87,10 @@ fun IncomeScreen(financevm: FinanceViewModel) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 16.dp)
+                    .padding(16.dp)
             ) {
                 items(allIncome.reversed()) { entry ->
-                    IncomeItem(entry, onButton = {showRemoveDialog = true})
+                    IncomeItem(entry, onButton = {showRemoveDialog = true}, valute = valute)
                     if (showRemoveDialog){
                         RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
                     }
@@ -107,7 +102,17 @@ fun IncomeScreen(financevm: FinanceViewModel) {
             IncomeDialog(
                 onDismiss = { showAddDialog = false },
                 onAddIncome = { amount, description ->
-                    financevm.insertOperation(Operation(id = 0, description = description, value = amount, isprofit = true, date = "01.01.25"))
+                    financevm.insertOperation(
+                        Operation(
+                            id = 0,
+                            description = description,
+                            value = amount,
+                            isprofit = true,
+                            date = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(
+                                Calendar.getInstance()
+                            )
+                        )
+                    )
                     showAddDialog = false
                 }
             )
@@ -118,7 +123,7 @@ fun IncomeScreen(financevm: FinanceViewModel) {
 }
 
 @Composable
-private fun IncomeItem(entry: Operation, onButton: () -> Unit) {
+private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,7 +148,7 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit) {
             }
             Row(verticalAlignment = Alignment.CenterVertically){
                 Text(
-                    text = "+%.2f ₽".format(entry.value),
+                    text = "+%.2f".format(entry.value) + valute,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFF4CAF50)
                 )
@@ -155,7 +160,6 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun IncomeDialog(
     onDismiss: () -> Unit,
