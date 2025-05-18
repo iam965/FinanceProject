@@ -6,8 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -39,9 +43,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
-        financevm = ViewModelProvider(this, FinanceViewModel.FinanceViewModelFactory(application, uiState))[FinanceViewModel::class.java]
+        financevm = ViewModelProvider(
+            this,
+            FinanceViewModel.FinanceViewModelFactory(application, uiState)
+        )[FinanceViewModel::class.java]
         setContent {
-            FinanceProjectTheme(financeViewModel = financevm){
+            FinanceProjectTheme(financeViewModel = financevm) {
                 MainScreen(financevm)
             }
         }
@@ -49,13 +56,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(financevm: FinanceViewModel){
+fun MainScreen(financevm: FinanceViewModel) {
     val navController = rememberNavController()
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }
     val allLoss = financevm.allLoss.collectAsState()
     val allProfit = financevm.allProfit.collectAsState()
     val allOperations = financevm.allOperations.collectAsState()
+    val valute = financevm.getValute()
 
     Scaffold(
         topBar = { navigationBar.TopBar(navController, title) },
@@ -66,66 +74,140 @@ fun MainScreen(financevm: FinanceViewModel){
                 composable(
                     NavRoutes.Income.route,
                     enterTransition = {
-                        slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth },
-                            animationSpec = tween(300)
-                        )
+                        if (navigationBar.currentScreen == "Settings") {
+                            slideInVertically(
+                                initialOffsetY = { fullHeight -> fullHeight },
+                                animationSpec = tween(300)
+                            ) + fadeIn()
+                        } else {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(300)
+                            ) + fadeIn()
+                        }
                     },
                     exitTransition = {
-                        slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth},
-                            animationSpec = tween(300)
-                            )
+                        if (navigationBar.targetScreen == "Settings") {
+                            slideOutVertically(
+                                targetOffsetY = { fullHeight -> fullHeight },
+                                animationSpec = tween(300)
+                            ) + fadeOut()
+                        } else {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(300)
+                            ) + fadeOut()
+                        }
                     }
                 ) {
                     navigationBar.currentScreen = "Income"
-                    IncomeScreen(financevm)
+                    IncomeScreen(financevm, valute)
                     title = "Доходы"
                 }
                 composable(
                     NavRoutes.Home.route,
                     enterTransition = {
-                        if (navigationBar.currentScreen == "Income") {
-                            slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth },
-                                animationSpec = tween(300)
-                                )
-                        } else {
-                            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth },
-                                animationSpec = tween(300)
-                                )
+                        when (navigationBar.currentScreen) {
+                            "Income" -> {
+                                slideInHorizontally(
+                                    initialOffsetX = { fullWidth -> -fullWidth },
+                                    animationSpec = tween(300)
+                                ) + fadeIn()
+                            }
+
+                            "Settings" -> {
+                                slideInVertically(
+                                    initialOffsetY = { fullHeight -> fullHeight },
+                                    animationSpec = tween(300)
+                                ) + fadeIn()
+                            }
+
+                            else -> {
+                                slideInHorizontally(
+                                    initialOffsetX = { fullWidth -> fullWidth },
+                                    animationSpec = tween(300)
+                                ) + fadeIn()
+                            }
                         }
                     },
                     exitTransition = {
-                        if (navigationBar.targetScreen == "Expense"){
-                            slideOutHorizontally(targetOffsetX = {fullWidth -> fullWidth},
-                                animationSpec = tween(300)
-                                )
-                        } else {
-                            slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth},
-                                animationSpec = tween(300)
-                                )
+                        when (navigationBar.targetScreen) {
+                            "Expense" -> {
+                                slideOutHorizontally(
+                                    targetOffsetX = { fullWidth -> fullWidth },
+                                    animationSpec = tween(300)
+                                ) + fadeOut()
+                            }
+
+                            "Settings" -> {
+                                slideOutVertically(
+                                    targetOffsetY = { fullHeight -> fullHeight },
+                                    animationSpec = tween(300)
+                                ) + fadeOut()
+                            }
+
+                            else -> {
+                                slideOutHorizontally(
+                                    targetOffsetX = { fullWidth -> -fullWidth },
+                                    animationSpec = tween(300)
+                                ) + fadeOut()
+                            }
                         }
                     }
                 ) {
-                    HomeScreen(allOperations = allOperations, allProfit = allProfit, allLoss = allLoss)
+                    navigationBar.currentScreen = "Home"
+                    HomeScreen(
+                        allOperations = allOperations,
+                        allProfit = allProfit,
+                        allLoss = allLoss,
+                        valute = valute
+                    )
                     title = "Главная"
                 }
                 composable(
                     NavRoutes.Expense.route,
                     enterTransition = {
-                        slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth },
-                            animationSpec = tween(300)
-                            )
+                        if (navigationBar.currentScreen == "Settings") {
+                            slideInVertically(
+                                initialOffsetY = { fullHeight -> fullHeight },
+                                animationSpec = tween(300)
+                            ) + fadeIn()
+                        } else {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -fullWidth },
+                                animationSpec = tween(300)
+                            ) + fadeIn()
+                        }
                     },
                     exitTransition = {
-                        slideOutHorizontally(targetOffsetX = {fullWidth -> -fullWidth},
-                            animationSpec = tween(300)
-                            )
+                        if (navigationBar.targetScreen == "Settings") {
+                            slideOutVertically(
+                                targetOffsetY = { fullHeight -> fullHeight },
+                                animationSpec = tween(300)
+                            ) + fadeOut()
+                        } else {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                                animationSpec = tween(300)
+                            ) + fadeOut()
+                        }
                     }
                 ) {
-                    ExpenseScreen(financevm);
+                    ExpenseScreen(financevm, valute);
                     navigationBar.currentScreen = "Expense"
                     title = "Расходы"
                 }
-                composable(NavRoutes.Settings.route)
+                composable(NavRoutes.Settings.route, enterTransition = {
+                    slideInVertically(
+                        initialOffsetY = { fullHeight -> -fullHeight },
+                        animationSpec = tween(300)
+                    ) + fadeIn()
+                }, exitTransition = {
+                    slideOutVertically(
+                        targetOffsetY = { fullHeight -> -fullHeight },
+                        animationSpec = tween(300)
+                    ) + fadeOut()
+                })
                 {
                     navigationBar.currentScreen = "Settings"
                     Settings(financevm)

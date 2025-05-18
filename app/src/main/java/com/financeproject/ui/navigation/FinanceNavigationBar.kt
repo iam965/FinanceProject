@@ -21,7 +21,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.financeproject.R
 
-class FinanceNavigationBar(){
+class FinanceNavigationBar() {
     private val items: List<BarItem>
     private val topBarNav: BarItem
     var currentScreen: String = "Home"
@@ -52,21 +52,24 @@ class FinanceNavigationBar(){
     fun BottomNavBar(navController: NavController) {
         NavigationBar() {
             val backStackEntry = navController.currentBackStackEntryAsState()
-            val currentRoute=backStackEntry.value?.destination?.route
+            val currentRoute = backStackEntry.value?.destination?.route
 
-            items.forEach { navItem->
+            items.forEach { navItem ->
                 NavigationBarItem(
-                    selected = currentRoute==navItem.route,
+                    selected = currentRoute == navItem.route,
                     onClick = {
                         targetScreen = navItem.title
-                        navController.navigate(navItem.route){
-                            popUpTo(navController.graph.findStartDestination().id){saveState=true}
-                            launchSingleTop=true
-                            restoreState=true
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     icon = {
-                        Icon(painter = BitmapPainter(ImageBitmap.imageResource(navItem.image)),
+                        Icon(
+                            painter = BitmapPainter(ImageBitmap.imageResource(navItem.image)),
                             contentDescription = navItem.title,
                             modifier = Modifier.size(40.dp)
                         )
@@ -89,7 +92,7 @@ class FinanceNavigationBar(){
         ), title = { Text(text = txt) },
             navigationIcon = {
                 IconButton(onClick = {
-                    targetScreen = topBarNav.title
+                    targetScreen = "Settings"
                     navController.navigate(topBarNav.route) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
