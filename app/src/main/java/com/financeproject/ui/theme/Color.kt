@@ -1,4 +1,5 @@
 package com.financeproject.ui.theme
+
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF426827)

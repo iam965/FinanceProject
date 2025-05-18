@@ -10,21 +10,21 @@ data class UIState(
     var selectedValute: String? = sharedPrefs.getString("valute", "₽")
 ) {
 
-    fun copy(): UIState{
+    fun copy(): UIState {
         return UIState(sharedPrefs, isDarkTheme, selectedValute)
     }
 
-    fun changeTheme(){
+    fun changeTheme() {
         isDarkTheme = !isDarkTheme
-        with(sharedPrefs.edit()){
+        with(sharedPrefs.edit()) {
             putBoolean("is_Dark_Theme", isDarkTheme)
             apply()
         }
     }
 
-    fun changeValute(valute: String){
+    fun changeValute(valute: String) {
         selectedValute = valute
-        with(sharedPrefs.edit()){
+        with(sharedPrefs.edit()) {
             putString("valute", valute)
             apply()
         }

@@ -26,7 +26,12 @@ import androidx.compose.ui.unit.sp
 import com.financeproject.data.Operation
 
 @Composable
-fun HomeScreen(allProfit:State<List<Operation>>, allLoss: State<List<Operation>>, allOperations: State<List<Operation>>, valute: String) {
+fun HomeScreen(
+    allProfit: State<List<Operation>>,
+    allLoss: State<List<Operation>>,
+    allOperations: State<List<Operation>>,
+    valute: String
+) {
 
     var profit = allProfit.value.sumOf { it.value }
     var loss = allLoss.value.sumOf { it.value }
@@ -53,7 +58,9 @@ private fun BalanceCard(balance: Double, valute: String) {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(24.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth()
         ) {
             Text(
                 "Общий баланс",
@@ -76,8 +83,20 @@ private fun IncomeExpenseStats(income: Double, expense: Double, valute: String) 
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.Bottom
     ) {
-        Diagram(value = expense, sum = income + expense, color = Color(0xFFF44336), text = "Расходы", valute)
-        Diagram(value = income, sum = income + expense, color = Color(0xFF4CAF50), text = "Доходы", valute)
+        Diagram(
+            value = expense,
+            sum = income + expense,
+            color = Color(0xFFF44336),
+            text = "Расходы",
+            valute
+        )
+        Diagram(
+            value = income,
+            sum = income + expense,
+            color = Color(0xFF4CAF50),
+            text = "Доходы",
+            valute
+        )
     }
 }
 
@@ -153,7 +172,9 @@ private fun OperationItem(operation: Operation, valute: String) {
             .padding(vertical = 4.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

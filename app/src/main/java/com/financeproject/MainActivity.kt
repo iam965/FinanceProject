@@ -43,9 +43,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
-        financevm = ViewModelProvider(this, FinanceViewModel.FinanceViewModelFactory(application, uiState))[FinanceViewModel::class.java]
+        financevm = ViewModelProvider(
+            this,
+            FinanceViewModel.FinanceViewModelFactory(application, uiState)
+        )[FinanceViewModel::class.java]
         setContent {
-            FinanceProjectTheme(financeViewModel = financevm){
+            FinanceProjectTheme(financeViewModel = financevm) {
                 MainScreen(financevm)
             }
         }
@@ -53,7 +56,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(financevm: FinanceViewModel){
+fun MainScreen(financevm: FinanceViewModel) {
     val navController = rememberNavController()
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }

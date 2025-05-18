@@ -73,14 +73,14 @@ fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
                     )
                 }
             }
-            ExtendedFloatingActionButton (
+            ExtendedFloatingActionButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
 
-                icon = {Icon(Icons.Default.Add, contentDescription = "add")},
-                text = {Text("Добавить расход")},
-                onClick = {showAddDialog=true}
+                icon = { Icon(Icons.Default.Add, contentDescription = "add") },
+                text = { Text("Добавить расход") },
+                onClick = { showAddDialog = true }
             )
             LazyColumn(
                 modifier = Modifier
@@ -88,9 +88,13 @@ fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
                     .padding(16.dp)
             ) {
                 items(allLoss.reversed()) { entry ->
-                    LossItem(entry, onButton = {showRemoveDialog = true}, valute = valute)
-                    if (showRemoveDialog){
-                        RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
+                    LossItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
+                    if (showRemoveDialog) {
+                        RemoveDialog(
+                            onDismiss = { showRemoveDialog = false },
+                            onRemoveIncome = {
+                                financevm.deleteOperation(entry); showRemoveDialog = false
+                            })
                     }
                 }
             }
@@ -144,7 +148,7 @@ private fun LossItem(entry: Operation, onButton: () -> Unit, valute: String) {
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
-            Row(verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "+%.2f".format(entry.value) + valute,
                     color = Color(0xFFF44336)

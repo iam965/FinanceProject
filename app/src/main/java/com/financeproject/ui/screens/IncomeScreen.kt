@@ -75,14 +75,14 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     )
                 }
             }
-            ExtendedFloatingActionButton (
+            ExtendedFloatingActionButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
 
-                icon = {Icon(Icons.Default.Add, contentDescription = "add")},
-                text = {Text("Добавить доход")},
-                onClick = {showAddDialog=true}
+                icon = { Icon(Icons.Default.Add, contentDescription = "add") },
+                text = { Text("Добавить доход") },
+                onClick = { showAddDialog = true }
             )
             LazyColumn(
                 modifier = Modifier
@@ -90,9 +90,13 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     .padding(16.dp)
             ) {
                 items(allIncome.reversed()) { entry ->
-                    IncomeItem(entry, onButton = {showRemoveDialog = true}, valute = valute)
-                    if (showRemoveDialog){
-                        RemoveDialog(onDismiss = {showRemoveDialog = false}, onRemoveIncome = {financevm.deleteOperation(entry); showRemoveDialog = false})
+                    IncomeItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
+                    if (showRemoveDialog) {
+                        RemoveDialog(
+                            onDismiss = { showRemoveDialog = false },
+                            onRemoveIncome = {
+                                financevm.deleteOperation(entry); showRemoveDialog = false
+                            })
                     }
                 }
             }
@@ -146,7 +150,7 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            Row(verticalAlignment = Alignment.CenterVertically){
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "+%.2f".format(entry.value) + valute,
                     style = MaterialTheme.typography.titleMedium,
@@ -218,7 +222,7 @@ private fun RemoveDialog(
     onDismiss: () -> Unit,
     onRemoveIncome: () -> Unit,
 
-) {
+    ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Удалить") },
@@ -228,7 +232,7 @@ private fun RemoveDialog(
         confirmButton = {
             TextButton(
                 onClick =
-                    onRemoveIncome
+                onRemoveIncome
 
             ) {
                 Text("Да")

@@ -20,7 +20,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
-class FinanceViewModel(application: Application, private val UiState: UIState): AndroidViewModel(application) {
+class FinanceViewModel(application: Application, private val UiState: UIState) :
+    AndroidViewModel(application) {
     private val operationRepository: OperationRepository
     val allProfit: StateFlow<List<Operation>>
     val allLoss: StateFlow<List<Operation>>
@@ -29,7 +30,7 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
     val isDarkTheme: State<Boolean> = _isDarkTheme
     private val _valute: MutableState<String?> = mutableStateOf(UiState.selectedValute)
 
-    init{
+    init {
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
         operationRepository = OperationRepository(operationDao)
         allProfit = operationRepository.allProfit.stateIn(
@@ -50,39 +51,40 @@ class FinanceViewModel(application: Application, private val UiState: UIState): 
 
     }
 
-    fun changeTheme(){
+    fun changeTheme() {
         _isDarkTheme.value = !_isDarkTheme.value
         UiState.changeTheme()
     }
 
-    fun changeValute(valute: String){
+    fun changeValute(valute: String) {
         _valute.value = valute
         UiState.changeValute(valute)
     }
 
-    fun getValute(): String{
+    fun getValute(): String {
         return _valute.value.toString()
     }
 
-    fun resetData(){
+    fun resetData() {
         viewModelScope.launch(Dispatchers.IO) {
             operationRepository.resetData()
         }
     }
 
-    fun insertOperation(operation: Operation){
+    fun insertOperation(operation: Operation) {
         viewModelScope.launch(Dispatchers.IO) {
             operationRepository.insertOperation(operation)
         }
     }
 
-    fun deleteOperation(operation: Operation){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteOperation(operation: Operation) {
+        viewModelScope.launch(Dispatchers.IO) {
             operationRepository.deleteOperation(operation)
         }
     }
 
-    class FinanceViewModelFactory(private val application: Application, UiState: UIState) : ViewModelProvider.Factory {
+    class FinanceViewModelFactory(private val application: Application, UiState: UIState) :
+        ViewModelProvider.Factory {
         private val uiState = UiState
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(FinanceViewModel::class.java)) {
