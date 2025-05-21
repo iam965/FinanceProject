@@ -52,10 +52,9 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { keepSplashScreen }
         lifecycleScope.launch {
-            delay(3000)
+            delay(2000)
             keepSplashScreen=false
         }
-
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
         financevm = ViewModelProvider(
