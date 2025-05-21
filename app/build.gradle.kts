@@ -67,6 +67,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.31.5-beta")
     ksp("androidx.room:room-compiler:2.7.1")
     implementation ("com.google.android.material:material:1.6.0")
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }
