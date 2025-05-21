@@ -22,7 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,12 +37,25 @@ import com.financeproject.ui.screens.Settings
 import com.financeproject.ui.state.UIState
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var financevm: FinanceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashScreen=installSplashScreen()
+        var keepSplashScreen=true
+
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
+        lifecycleScope.launch {
+            delay(3000)
+            keepSplashScreen=false
+        }
+
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
         financevm = ViewModelProvider(
