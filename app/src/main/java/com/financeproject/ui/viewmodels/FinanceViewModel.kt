@@ -3,21 +3,23 @@ package com.financeproject.ui.viewmodels
 import android.app.Application
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.financeproject.data.FinanceDataBase
-import com.financeproject.data.Operation
-import com.financeproject.data.OperationRepository
+import com.financeproject.data.api.CurrencyRepository
+import com.financeproject.data.db.FinanceDataBase
+import com.financeproject.data.db.Operation
+import com.financeproject.data.db.OperationRepository
+import com.financeproject.ui.state.CurrencyState
 import com.financeproject.ui.state.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Currency
 
 
 class FinanceViewModel(application: Application, private val UiState: UIState) :
@@ -29,6 +31,8 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
     private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
     val isDarkTheme: State<Boolean> = _isDarkTheme
     private val _valute: MutableState<String?> = mutableStateOf(UiState.selectedValute)
+    private val currencyRepository = CurrencyRepository()
+    var currency = mutableStateOf<CurrencyState>(CurrencyState.Loading)
 
     init {
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
@@ -48,7 +52,7 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
-
+        getDailyRates()
     }
 
     fun changeTheme() {
@@ -80,6 +84,24 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
     fun deleteOperation(operation: Operation) {
         viewModelScope.launch(Dispatchers.IO) {
             operationRepository.deleteOperation(operation)
+        }
+    }
+
+    private fun getDailyRates(){
+        currency.value = CurrencyState.Loading
+        viewModelScope.launch {
+            try {
+                val response = currencyRepository.getDailyRates()
+                val usd = response.Valute["USD"]
+                val eur = response.Valute["EUR"]
+                if (usd != null && eur != null){
+                    currency.value = CurrencyState.Success(usd = usd, eur = eur)
+                } else {
+                    currency.value = CurrencyState.Error("Cant find currency")
+                }
+            } catch (e: Exception){
+                currency.value = CurrencyState.Error("Error")
+            }
         }
     }
 

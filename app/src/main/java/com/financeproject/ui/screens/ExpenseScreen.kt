@@ -35,7 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.financeproject.data.Operation
+import com.financeproject.data.db.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.util.Locale
 

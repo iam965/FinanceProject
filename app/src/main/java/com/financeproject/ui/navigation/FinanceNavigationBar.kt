@@ -1,5 +1,9 @@
 package com.financeproject.ui.navigation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,6 +15,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -20,6 +25,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.financeproject.R
+import com.financeproject.ui.state.CurrencyState
+import com.financeproject.ui.viewmodels.FinanceViewModel
+import okhttp3.internal.format
 
 class FinanceNavigationBar() {
     private val items: List<BarItem>
@@ -82,15 +90,20 @@ class FinanceNavigationBar() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun TopBar(navController: NavController, txt: String) {
+    fun TopBar(navController: NavController, txt: String, vm: FinanceViewModel) {
+        val currency = vm.currency.value
         CenterAlignedTopAppBar(colors = TopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
             titleContentColor = MaterialTheme.colorScheme.onSurface,
             actionIconContentColor = MaterialTheme.colorScheme.onSurface
-        ), title = { Text(text = txt) },
-            navigationIcon = {
+        ), title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(onClick = {
                     targetScreen = "Settings"
                     navController.navigate(topBarNav.route) {
@@ -105,6 +118,23 @@ class FinanceNavigationBar() {
                         modifier = Modifier.size(25.dp)
                     )
                 }
+                Text(text = txt)
+                Column {
+                    when(currency){
+                        is CurrencyState.Loading -> {Text(text = "Загрузка курса...", style = MaterialTheme.typography.bodyMedium)}
+                        is CurrencyState.Success -> {
+                            val cur = currency
+                            Text(text = "$"+"%.2f".format(cur.usd.Value), style = MaterialTheme.typography.bodyLarge)
+                            Text(text = "€"+"%.2f".format(cur.eur.Value), style = MaterialTheme.typography.bodyLarge)
+                        }
+                        is CurrencyState.Error -> {
+                            Text(text = "Error")
+                        }
+                    }
+                }
+            }
+        },
+            navigationIcon = {
             }
         )
     }

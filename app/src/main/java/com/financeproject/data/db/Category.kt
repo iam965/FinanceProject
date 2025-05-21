@@ -1,4 +1,4 @@
-package com.financeproject.data
+package com.financeproject.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

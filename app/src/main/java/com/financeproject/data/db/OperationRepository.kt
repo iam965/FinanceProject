@@ -1,4 +1,4 @@
-package com.financeproject.data
+package com.financeproject.data.db
 
 import kotlinx.coroutines.flow.Flow
 

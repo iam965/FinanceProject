@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.financeproject.data.Operation
+import com.financeproject.data.db.Operation
 
 @Composable
 fun HomeScreen(
