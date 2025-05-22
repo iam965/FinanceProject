@@ -1,9 +1,11 @@
 package com.financeproject.ui.navigation
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +29,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.financeproject.R
 import com.financeproject.ui.state.CurrencyState
 import com.financeproject.ui.viewmodels.FinanceViewModel
-import okhttp3.internal.format
 
 class FinanceNavigationBar() {
     private val items: List<BarItem>
@@ -99,10 +100,11 @@ class FinanceNavigationBar() {
             titleContentColor = MaterialTheme.colorScheme.onSurface,
             actionIconContentColor = MaterialTheme.colorScheme.onSurface
         ), title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(10.dp),
             ) {
                 IconButton(onClick = {
                     targetScreen = "Settings"
@@ -111,25 +113,52 @@ class FinanceNavigationBar() {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }) {
+                }, modifier = Modifier.align(Alignment.CenterStart)) {
                     Icon(
                         painter = BitmapPainter(ImageBitmap.imageResource(R.drawable.settings)),
                         contentDescription = "Settings",
                         modifier = Modifier.size(25.dp)
                     )
                 }
-                Text(text = txt)
-                Column {
-                    when(currency){
-                        is CurrencyState.Loading -> {Text(text = "Загрузка курса...", style = MaterialTheme.typography.bodyMedium)}
-                        is CurrencyState.Success -> {
-                            val cur = currency
-                            Text(text = "$"+"%.2f".format(cur.usd.Value), style = MaterialTheme.typography.bodyLarge)
-                            Text(text = "€"+"%.2f".format(cur.eur.Value), style = MaterialTheme.typography.bodyLarge)
+                Text(text = txt, modifier = Modifier.align(Alignment.Center))
+                when (currency) {
+                    is CurrencyState.Loading -> {
+                        Column(modifier = Modifier.align(Alignment.CenterEnd), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "Загрузка", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "курса...", style = MaterialTheme.typography.bodyMedium)
                         }
-                        is CurrencyState.Error -> {
-                            Text(text = "Error")
+                    }
+
+                    is CurrencyState.Success -> {
+                        Column(
+                            modifier = Modifier
+                                .clickable(onClick = { vm.getDailyRates(true) })
+                                .align(Alignment.CenterEnd),
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "$" + "%.2f".format(currency.usd.Value),
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                            Text(
+                                text = "€" + "%.2f".format(currency.eur.Value),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            if (vm.isCachedData()) {
+                                Text(
+                                    text = "Устарел",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
                         }
+                    }
+
+                    is CurrencyState.Error -> {
+                        Text(
+                            text = "Error",
+                            modifier = Modifier
+                                .clickable(onClick = { vm.getDailyRates(true) })
+                                .align(Alignment.CenterEnd)
+                        )
                     }
                 }
             }

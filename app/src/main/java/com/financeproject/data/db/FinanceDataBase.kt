@@ -6,11 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    version = 2,
-    entities = [Operation::class]
+    version = 3,
+    entities = [Operation::class, CurrencyEntity::class]
 )
 abstract class FinanceDataBase : RoomDatabase() {
     abstract fun getOperationDao(): OperationDao
+    abstract fun getCurrencyDao(): CurrencyDao
 
     companion object {
         private var Instance: FinanceDataBase? = null
