@@ -43,7 +43,6 @@ import java.util.Locale
 fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
     val allIncome by financevm.allProfit.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
-    var showRemoveDialog by remember { mutableStateOf(false) }
     var totalIncome = allIncome.sumOf { it.value }
 
     Column {
@@ -89,6 +88,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     .padding(16.dp)
             ) {
                 items(allIncome.reversed()) { entry ->
+                    var showRemoveDialog by remember { mutableStateOf(false) }
                     IncomeItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(

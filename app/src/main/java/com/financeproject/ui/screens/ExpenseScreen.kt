@@ -43,7 +43,6 @@ import java.util.Locale
 fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
     val allLoss by financevm.allLoss.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
-    var showRemoveDialog by remember { mutableStateOf(false) }
     var totalLoss = allLoss.sumOf { it.value }
 
     Column {
@@ -88,6 +87,7 @@ fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
                     .padding(16.dp)
             ) {
                 items(allLoss.reversed()) { entry ->
+                    var showRemoveDialog by remember { mutableStateOf(false) }
                     LossItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(

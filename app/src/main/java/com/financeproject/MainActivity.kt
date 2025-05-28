@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.financeproject.data.db.Operation
 import com.financeproject.ui.navigation.FinanceNavigationBar
 import com.financeproject.ui.navigation.NavRoutes
 import com.financeproject.ui.screens.ExpenseScreen
@@ -49,20 +51,20 @@ class MainActivity : ComponentActivity() {
         )[FinanceViewModel::class.java]
         setContent {
             FinanceProjectTheme(financeViewModel = financevm) {
-                MainScreen(financevm)
+                val allLoss = financevm.allLoss.collectAsState()
+                val allProfit = financevm.allProfit.collectAsState()
+                val allOperations = financevm.allOperations.collectAsState()
+                MainScreen(financevm, allLoss = allLoss, allProfit = allProfit, allOperations = allOperations)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(financevm: FinanceViewModel) {
+fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>,allProfit: State<List<Operation>>, allOperations: State<List<Operation>>) {
     val navController = rememberNavController()
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }
-    val allLoss = financevm.allLoss.collectAsState()
-    val allProfit = financevm.allProfit.collectAsState()
-    val allOperations = financevm.allOperations.collectAsState()
     val valute = financevm.getValute()
 
     Scaffold(
