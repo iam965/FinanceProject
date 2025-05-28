@@ -67,16 +67,16 @@ class MainActivity : ComponentActivity() {
 
             var showSplash by remember { mutableStateOf(true) }
             FinanceProjectTheme(financevm) {
-                //if (showSplash){
+                if (showSplash){
                     SplashScreen (
                         onSplashFinished = {
                             showSplash=false
                         }
                     )
-                //}
-                //else {
+                }
+                else {
                     MainScreen(financevm)
-                //}
+                }
             }
         }
     }
