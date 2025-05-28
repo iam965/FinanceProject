@@ -68,5 +68,5 @@ dependencies {
     ksp("androidx.room:room-compiler:2.7.1")
     implementation ("com.google.android.material:material:1.6.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
-
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
 }

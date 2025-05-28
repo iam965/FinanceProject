@@ -34,6 +34,7 @@ import com.financeproject.ui.screens.ExpenseScreen
 import com.financeproject.ui.screens.HomeScreen
 import com.financeproject.ui.screens.IncomeScreen
 import com.financeproject.ui.screens.Settings
+import com.financeproject.ui.screens.SplashScreen
 import com.financeproject.ui.state.UIState
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.viewmodels.FinanceViewModel
@@ -44,16 +45,16 @@ class MainActivity : ComponentActivity() {
     private lateinit var financevm: FinanceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        val splashScreen=installSplashScreen()
-        var keepSplashScreen=true
+        val splashScreen = installSplashScreen()
+        var keepSplashScreen = true
 
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition { keepSplashScreen }
+
         lifecycleScope.launch {
-            delay(2000)
-            keepSplashScreen=false
+            delay(400)
+            keepSplashScreen = false
         }
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
@@ -62,8 +63,20 @@ class MainActivity : ComponentActivity() {
             FinanceViewModel.FinanceViewModelFactory(application, uiState)
         )[FinanceViewModel::class.java]
         setContent {
-            FinanceProjectTheme(financeViewModel = financevm) {
-                MainScreen(financevm)
+
+
+            var showSplash by remember { mutableStateOf(true) }
+            FinanceProjectTheme(financevm) {
+                //if (showSplash){
+                    SplashScreen (
+                        onSplashFinished = {
+                            showSplash=false
+                        }
+                    )
+                //}
+                //else {
+                    MainScreen(financevm)
+                //}
             }
         }
     }
@@ -232,10 +245,3 @@ fun MainScreen(financevm: FinanceViewModel) {
     }
 }
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FinanceProjectTheme {
-    }
-}*/
