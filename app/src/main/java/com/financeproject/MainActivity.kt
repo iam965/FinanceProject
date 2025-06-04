@@ -66,7 +66,7 @@ fun MainScreen(financevm: FinanceViewModel) {
     val valute = financevm.getValute()
 
     Scaffold(
-        topBar = { navigationBar.TopBar(navController, title) },
+        topBar = { navigationBar.TopBar(navController, title,financevm) },
         bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
