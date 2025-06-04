@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedVisibility(
                         visible = showSplash,
-                        enter = fadeIn(animationSpec = tween(700)),
+                        enter = fadeIn(animationSpec = tween(400)),
                         exit = fadeOut(animationSpec = tween(700))
                     ) {
                         SplashScreen(
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                     AnimatedVisibility(
                         visible = !showSplash,
                         enter = fadeIn(animationSpec = tween(700)),
-                        exit = fadeOut(animationSpec = tween(700))
+                        exit = fadeOut(animationSpec = tween(500))
                     ) {
                         MainScreen(financevm)
                     }
