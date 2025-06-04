@@ -67,8 +67,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.31.5-beta")
     ksp("androidx.room:room-compiler:2.7.1")
     implementation ("com.google.android.material:material:1.6.0")
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+
 
     // Testing
     testImplementation("junit:junit:4.13.2")
