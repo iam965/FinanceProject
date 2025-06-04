@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.financeproject.data.db.Operation
 import com.financeproject.ui.navigation.FinanceNavigationBar
 import com.financeproject.ui.navigation.NavRoutes
 import com.financeproject.ui.screens.ExpenseScreen
@@ -63,7 +65,9 @@ class MainActivity : ComponentActivity() {
             FinanceViewModel.FinanceViewModelFactory(application, uiState)
         )[FinanceViewModel::class.java]
         setContent {
-
+            val allLoss = financevm.allLoss.collectAsState()
+            val allProfit = financevm.allProfit.collectAsState()
+            val allOperations = financevm.allOperations.collectAsState()
 
             var showSplash by remember { mutableStateOf(true) }
             FinanceProjectTheme(financevm) {
@@ -75,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 else {
-                    MainScreen(financevm)
+                    MainScreen(financevm, allProfit = allProfit, allLoss = allLoss, allOperations = allOperations)
                 }
             }
         }
@@ -83,17 +87,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(financevm: FinanceViewModel) {
+fun MainScreen(financevm: FinanceViewModel, allProfit: State<List<Operation>>, allLoss: State<List<Operation>>, allOperations: State<List<Operation>>) {
     val navController = rememberNavController()
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }
-    val allLoss = financevm.allLoss.collectAsState()
-    val allProfit = financevm.allProfit.collectAsState()
-    val allOperations = financevm.allOperations.collectAsState()
     val valute = financevm.getValute()
 
     Scaffold(
-        topBar = { navigationBar.TopBar(navController, title,financevm) },
+        topBar = { navigationBar.TopBar(navController, title, financevm) },
         bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {

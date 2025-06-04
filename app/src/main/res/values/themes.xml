@@ -3,9 +3,10 @@
     <style name="Theme.FinanceProject.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-
-        <item name="postSplashScreenTheme">@style/Theme.Design.Light.NoActionBar</item>
+        <item name="postSplashScreenTheme">@style/Theme.FinanceProject</item>
     </style>
+
+    <style name="Theme.FinanceProject" parent="android:Theme.Material.Light.NoActionBar" />
 
     <!--
     <style name="Theme.FinanceProject" parent="android:Theme.Material.Light.NoActionBar" />
