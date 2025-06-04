@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,7 +13,9 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -63,19 +66,28 @@ class MainActivity : ComponentActivity() {
             FinanceViewModel.FinanceViewModelFactory(application, uiState)
         )[FinanceViewModel::class.java]
         setContent {
-
-
             var showSplash by remember { mutableStateOf(true) }
             FinanceProjectTheme(financevm) {
-                if (showSplash){
-                    SplashScreen (
-                        onSplashFinished = {
-                            showSplash=false
-                        }
-                    )
-                }
-                else {
-                    MainScreen(financevm)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AnimatedVisibility(
+                        visible = showSplash,
+                        enter = fadeIn(animationSpec = tween(700)),
+                        exit = fadeOut(animationSpec = tween(700))
+                    ) {
+                        SplashScreen(
+                            onSplashFinished = {
+                                showSplash = false
+                            }
+                        )
+                    }
+
+                    AnimatedVisibility(
+                        visible = !showSplash,
+                        enter = fadeIn(animationSpec = tween(700)),
+                        exit = fadeOut(animationSpec = tween(700))
+                    ) {
+                        MainScreen(financevm)
+                    }
                 }
             }
         }
