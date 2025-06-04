@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,9 @@ class MainActivity : ComponentActivity() {
         )[FinanceViewModel::class.java]
         setContent {
             var showSplash by remember { mutableStateOf(true) }
+            val allLoss = financevm.allLoss.collectAsState()
+            val allProfit = financevm.allProfit.collectAsState()
+            val allOperations = financevm.allOperations.collectAsState()
             FinanceProjectTheme(financevm) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedVisibility(
@@ -69,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         enter = fadeIn(animationSpec = tween(700)),
                         exit = fadeOut(animationSpec = tween(500))
                     ) {
-                        MainScreen(financevm)
+                        MainScreen(financevm = financevm, allProfit = allProfit, allLoss = allLoss, allOperations = allOperations)
                     }
                 }
             }
