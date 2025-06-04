@@ -22,7 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,15 +34,28 @@ import com.financeproject.ui.screens.ExpenseScreen
 import com.financeproject.ui.screens.HomeScreen
 import com.financeproject.ui.screens.IncomeScreen
 import com.financeproject.ui.screens.Settings
+import com.financeproject.ui.screens.SplashScreen
 import com.financeproject.ui.state.UIState
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var financevm: FinanceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        var keepSplashScreen = true
+
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { keepSplashScreen }
+
+        lifecycleScope.launch {
+            delay(400)
+            keepSplashScreen = false
+        }
         enableEdgeToEdge()
         val uiState = UIState(application.getSharedPreferences("appSettings", Context.MODE_PRIVATE))
         financevm = ViewModelProvider(
@@ -48,8 +63,20 @@ class MainActivity : ComponentActivity() {
             FinanceViewModel.FinanceViewModelFactory(application, uiState)
         )[FinanceViewModel::class.java]
         setContent {
-            FinanceProjectTheme(financeViewModel = financevm) {
-                MainScreen(financevm)
+
+
+            var showSplash by remember { mutableStateOf(true) }
+            FinanceProjectTheme(financevm) {
+                if (showSplash){
+                    SplashScreen (
+                        onSplashFinished = {
+                            showSplash=false
+                        }
+                    )
+                }
+                else {
+                    MainScreen(financevm)
+                }
             }
         }
     }
@@ -66,7 +93,7 @@ fun MainScreen(financevm: FinanceViewModel) {
     val valute = financevm.getValute()
 
     Scaffold(
-        topBar = { navigationBar.TopBar(navController, title) },
+        topBar = { navigationBar.TopBar(navController, title,financevm) },
         bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
