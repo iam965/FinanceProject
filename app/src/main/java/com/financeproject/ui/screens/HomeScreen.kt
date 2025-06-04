@@ -157,7 +157,7 @@ private fun RecentOperations(operations: List<Operation>, valute: String) {
         )
 
         LazyColumn {
-            items(operations.takeLast(5)) { operation ->
+            items(operations.takeLast(5).reversed()) { operation ->
                 OperationItem(operation, valute)
             }
         }
