@@ -7,29 +7,42 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
+import androidx.compose.ui.platform.testTag
+import com.airbnb.lottie.compose.*
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(onSplashFinished: () -> Unit) {
+fun SplashScreen(
+    onSplashFinished: () -> Unit,
+    isTest: Boolean = false
+) {
+    // Skip animation loading in test mode
+    if (isTest) {
+        SideEffect {
+            onSplashFinished()
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .testTag("splashScreen"),
+            contentAlignment = Alignment.Center
+        ) {
+            // Empty content for test mode
+        }
+        return
+    }
+
     val composition by rememberLottieComposition(
         LottieCompositionSpec.Asset("SplashAnim.json")
     )
 
     var isPlaying by remember { mutableStateOf(false) }
     var alpha by remember { mutableStateOf(1f) }
-
     var backgroundColor = MaterialTheme.colorScheme.background
 
     LaunchedEffect(Unit) {
@@ -49,14 +62,14 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             backgroundColor = backgroundColor.copy(alpha = 1f - value)
         }
 
-        isPlaying = false
         onSplashFinished()
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor),
+            .background(backgroundColor)
+            .testTag("splashScreen"),
         contentAlignment = Alignment.Center
     ) {
         LottieAnimation(
@@ -66,6 +79,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(alpha = alpha)
+                .testTag("splashAnimation")
         )
     }
 }
