@@ -64,7 +64,8 @@ class MainActivity : ComponentActivity() {
                         SplashScreen(
                             onSplashFinished = {
                                 showSplash = false
-                            }
+                            },
+                            financevm
                         )
                     }
 

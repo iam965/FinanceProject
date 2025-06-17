@@ -97,7 +97,7 @@ fun FinanceProjectTheme(
     val colorScheme = when {
         dynamicColor && financeViewModel.isDarkTheme.value -> dynamicDarkColorScheme(LocalContext.current)
         dynamicColor && !financeViewModel.isDarkTheme.value -> dynamicLightColorScheme(LocalContext.current)
-        !financeViewModel.isDarkTheme.value -> DarkColorScheme
+        financeViewModel.isDarkTheme.value -> DarkColorScheme
         else -> LightColorScheme
     }
 

@@ -4,20 +4,33 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
-import com.airbnb.lottie.compose.*
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.financeproject.ui.viewmodels.FinanceViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     onSplashFinished: () -> Unit,
+    financeViewModel: FinanceViewModel,
     isTest: Boolean = false
 ) {
     // Skip animation loading in test mode
@@ -28,7 +41,7 @@ fun SplashScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.onBackground)
                 .testTag("splashScreen"),
             contentAlignment = Alignment.Center
         ) {
@@ -37,12 +50,15 @@ fun SplashScreen(
         return
     }
 
+    val isDarkTheme by financeViewModel.isDarkTheme
+    val animationAsset = if (isDarkTheme) "SplashAnimDark.json" else "SplashAnim.json"
+
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.Asset("SplashAnim.json")
+        LottieCompositionSpec.Asset(animationAsset)
     )
 
     var isPlaying by remember { mutableStateOf(false) }
-    var alpha by remember { mutableStateOf(1f) }
+    var alpha by remember { mutableFloatStateOf(1f) }
     var backgroundColor = MaterialTheme.colorScheme.background
 
     LaunchedEffect(Unit) {
@@ -61,7 +77,6 @@ fun SplashScreen(
             alpha = value
             backgroundColor = backgroundColor.copy(alpha = 1f - value)
         }
-
         onSplashFinished()
     }
 
@@ -79,7 +94,7 @@ fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(alpha = alpha)
-                .testTag("splashAnimation")
+                .testTag("splashAnimation"),
         )
     }
 }
