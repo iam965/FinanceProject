@@ -1,7 +1,5 @@
 package com.financeproject.ui.screens
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.financeproject.data.db.Operation
+import com.financeproject.logic.dateTime.DateComparator
+import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.viewmodels.FinanceViewModel
-import java.util.Locale
+import java.time.LocalDateTime
 
 @Composable
 fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
@@ -89,7 +89,13 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
             ) {
                 items(allIncome.reversed()) { entry ->
                     var showRemoveDialog by remember { mutableStateOf(false) }
-                    IncomeItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
+                    if (DateComparator.isInMonth(
+                            DateFormat.getDateTimeFromString(entry.date),
+                            LocalDateTime.now()
+                        )
+                    ) {
+                        IncomeItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
+                    }
                     if (showRemoveDialog) {
                         RemoveDialog(
                             onDismiss = { showRemoveDialog = false },
@@ -111,9 +117,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                             description = description,
                             value = amount,
                             isprofit = true,
-                            date = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(
-                                Calendar.getInstance()
-                            )
+                            date = DateFormat.getDateTimeString(LocalDateTime.now())
                         )
                     )
                     showAddDialog = false
