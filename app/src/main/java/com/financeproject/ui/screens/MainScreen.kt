@@ -32,6 +32,7 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }
     val valute = financevm.getValute()
+    val language=financevm.getLanguage()
 
     Scaffold(
         topBar = { navigationBar.TopBar(navController, title,financevm) },

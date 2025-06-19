@@ -29,6 +29,7 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
     private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
     val isDarkTheme: State<Boolean> = _isDarkTheme
     private val _valute: MutableState<String?> = mutableStateOf(UiState.selectedValute)
+    private val _language: MutableState<String?> = mutableStateOf(UiState.selectedLanguage)
     private val currencyRepository: CurrencyRepository
     var currency = mutableStateOf<CurrencyState>(CurrencyState.Loading)
 
@@ -65,8 +66,17 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
         UiState.changeValute(valute)
     }
 
+    fun changeLanguage(language: String){
+        _language.value =language
+        UiState.changeLanguage(language)
+    }
+
     fun getValute(): String {
         return _valute.value.toString()
+    }
+
+    fun getLanguage(): String{
+        return _language.value.toString()
     }
 
     fun resetData() {

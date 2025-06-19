@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +29,7 @@ import com.financeproject.ui.viewmodels.FinanceViewModel
 fun Settings(financevm: FinanceViewModel) {
     var showResetDialog by remember { mutableStateOf(false) }
     var showValutePicker by remember { mutableStateOf(false) }
+    var showChangeLanguage by remember { mutableStateOf(false) }
     val isDarkTheme by remember { mutableStateOf(financevm.isDarkTheme) }
 
     Column(
@@ -76,6 +77,24 @@ fun Settings(financevm: FinanceViewModel) {
                 .fillMaxWidth()
                 .padding(4.dp)
                 .height(75.dp)
+                .clickable { showChangeLanguage = true }
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Сменить язык")
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .height(75.dp)
                 .clickable { showResetDialog = true }
         ) {
             Row(
@@ -99,12 +118,19 @@ fun Settings(financevm: FinanceViewModel) {
                 onPick = { str -> financevm.changeValute(str); showValutePicker = false },
                 onDismiss = { showValutePicker = false })
         }
+        if (showChangeLanguage) {
+            ChangeLanguage(
+                onPick = { str -> financevm.changeLanguage(str);showChangeLanguage = false },
+                onDismiss = { showChangeLanguage = false }
+            )
+        }
     }
 }
 
 @Composable
 private fun ResetDialog(onDismiss: () -> Unit, onReset: () -> Unit) {
-    AlertDialog(onDismissRequest = onDismiss,
+    AlertDialog(
+        onDismissRequest = onDismiss,
         title = { Text("Сброс данных") },
         text = {
             Column {
@@ -122,12 +148,14 @@ private fun ResetDialog(onDismiss: () -> Unit, onReset: () -> Unit) {
             TextButton(onClick = onDismiss) {
                 Text("Отмена")
             }
-        })
+        }
+    )
 }
 
 @Composable
 private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = onDismiss,
+    AlertDialog(
+        onDismissRequest = onDismiss,
         title = { Text(text = "Выбор валюты") },
         text = {
             Column(
@@ -163,5 +191,45 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
             TextButton(onClick = onDismiss) {
                 Text("Отмена")
             }
-        })
+        }
+    )
+}
+
+@Composable
+private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Выбор языка") },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Русский",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable { onPick("ru") }
+                )
+                Divider()
+                Text(
+                    text = "Английский",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable { onPick("en") }
+                )
+
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Отмена")
+            }
+        }
+    )
 }
