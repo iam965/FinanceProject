@@ -68,7 +68,7 @@ fun SplashScreen(
             android.R.color.system_accent1_600
         }
         else{
-            android.R.color.system_accent1_500
+            android.R.color.system_accent1_200
         }
         Color(context.resources.getColor(systemColorRes,null))
     }
