@@ -1,5 +1,6 @@
 package com.financeproject.logic.dateTime;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class DateComparator {
@@ -11,7 +12,7 @@ public class DateComparator {
         return (date.getMonth() == month.getMonth() && date.getYear() == month.getYear());
     }
 
-    public static boolean isInPeriod(LocalDateTime date, LocalDateTime b, LocalDateTime e){
-        return date.isAfter(b) && date.isBefore(e);
+    public static boolean isInPeriod(LocalDate date, LocalDate b, LocalDate e){
+        return (date.isAfter(b) || date.isEqual(b)) && (date.isBefore(e) || date.isEqual(e));
     }
 }

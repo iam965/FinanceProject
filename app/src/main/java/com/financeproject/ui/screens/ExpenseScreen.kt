@@ -1,7 +1,5 @@
 package com.financeproject.ui.screens
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,23 +42,16 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
+import com.financeproject.logic.functions.checkPeriod
 
 @Composable
-fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
-    val dateRangePicker =
-        MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select dates")
-            .setSelection(
-                androidx.core.util.Pair(
-                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                    MaterialDatePicker.todayInUtcMilliseconds()
-                )
-            )
-            .build()
-
-    val allLoss by financevm.allLoss.collectAsState()
+fun ExpenseScreen(financevm: FinanceViewModel, allLoss: List<Operation>, valute: String, beg: Long, end: Long) {
+    //val allLoss by financevm.allLoss.collectAsState()
+    var begPeriod = DateFormat.getDateFromMillis(beg)
+    var endPeriod = DateFormat.getDateFromMillis(end)
+    var periodLoss = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allLoss)
     var showAddDialog by remember { mutableStateOf(false) }
-    var totalLoss = allLoss.sumOf { it.value }
+    var totalLoss = periodLoss.sumOf { it.value }
 
     Column {
         Column(
@@ -103,15 +94,9 @@ fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                items(allLoss.reversed()) { entry ->
+                items(periodLoss.reversed()) { entry ->
                     var showRemoveDialog by remember { mutableStateOf(false) }
-                    if (DateComparator.isInMonth(
-                            DateFormat.getDateTimeFromString(entry.date),
-                            LocalDateTime.now()
-                        )
-                    ) {
-                        LossItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
-                    }
+                    LossItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(
                             onDismiss = { showRemoveDialog = false },
@@ -133,7 +118,7 @@ fun ExpenseScreen(financevm: FinanceViewModel, valute: String) {
                             description = description,
                             value = amount,
                             isprofit = false,
-                            date = DateFormat.getDateTimeString(LocalDateTime.now())
+                            date = DateFormat.getDateString(LocalDate.now())
                         )
                     )
                     showAddDialog = false

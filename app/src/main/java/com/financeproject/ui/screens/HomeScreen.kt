@@ -24,17 +24,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.financeproject.data.db.Operation
+import com.financeproject.logic.dateTime.DateFormat
+import com.financeproject.logic.functions.checkPeriod
 
 @Composable
 fun HomeScreen(
     allProfit: State<List<Operation>>,
     allLoss: State<List<Operation>>,
     allOperations: State<List<Operation>>,
-    valute: String
+    valute: String,
+    beg: Long,
+    end: Long
 ) {
-
-    var profit = allProfit.value.sumOf { it.value }
-    var loss = allLoss.value.sumOf { it.value }
+    var begPeriod = DateFormat.getDateFromMillis(beg)
+    var endPeriod = DateFormat.getDateFromMillis(end)
+    var periodOperations = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allOperations.value)
+    var periodLoss = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allLoss.value)
+    var periodProfit = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allProfit.value)
+    var profit = periodProfit.sumOf { it.value }
+    var loss = periodLoss.sumOf { it.value }
     var balance = profit - loss
 
     Column(
@@ -45,7 +53,7 @@ fun HomeScreen(
 
         IncomeExpenseStats(profit, loss, valute)
 
-        RecentOperations(allOperations.value, valute)
+        RecentOperations(periodOperations, valute)
     }
 }
 

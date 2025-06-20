@@ -38,10 +38,15 @@ import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.time.LocalDateTime
+import com.financeproject.logic.functions.checkPeriod
+import java.time.LocalDate
 
 @Composable
-fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
+fun IncomeScreen(financevm: FinanceViewModel, valute: String, beg: Long, end: Long) {
     val allIncome by financevm.allProfit.collectAsState()
+    var begPeriod = DateFormat.getDateFromMillis(beg)
+    var endPeriod = DateFormat.getDateFromMillis(end)
+    var periodIncome = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allIncome)
     var showAddDialog by remember { mutableStateOf(false) }
     var totalIncome = allIncome.sumOf { it.value }
 
@@ -87,15 +92,9 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                items(allIncome.reversed()) { entry ->
+                items(periodIncome.reversed()) { entry ->
                     var showRemoveDialog by remember { mutableStateOf(false) }
-                    if (DateComparator.isInMonth(
-                            DateFormat.getDateTimeFromString(entry.date),
-                            LocalDateTime.now()
-                        )
-                    ) {
-                        IncomeItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
-                    }
+                    IncomeItem(entry, onButton =  { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(
                             onDismiss = { showRemoveDialog = false },
@@ -117,7 +116,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                             description = description,
                             value = amount,
                             isprofit = true,
-                            date = DateFormat.getDateTimeString(LocalDateTime.now())
+                            date = DateFormat.getDateString(LocalDate.now())
                         )
                     )
                     showAddDialog = false
