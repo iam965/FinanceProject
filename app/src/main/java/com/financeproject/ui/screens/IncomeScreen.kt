@@ -34,7 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.financeproject.R
 import com.financeproject.data.db.Operation
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.util.Locale
@@ -63,7 +65,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Общий доход",
+                        stringResource(id=R.string.total_income),
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
@@ -79,7 +81,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                     .padding(10.dp),
 
                 icon = { Icon(Icons.Default.Add, contentDescription = "add") },
-                text = { Text("Добавить доход") },
+                text = { Text(stringResource(id=R.string.add_income)) },
                 onClick = { showAddDialog = true }
             )
             LazyColumn(
@@ -173,13 +175,13 @@ private fun IncomeDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Добавить доход") },
+        title = { Text(stringResource(id=R.string.add_income))},
         text = {
             Column {
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
-                    label = { Text("Сумма") },
+                    label = { Text(stringResource(id = R.string.amount)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardOptions.Default.keyboardType
@@ -190,7 +192,7 @@ private fun IncomeDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Описание") },
+                    label = { Text(stringResource(id=R.string.description)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -205,12 +207,12 @@ private fun IncomeDialog(
                     }
                 }
             ) {
-                Text("Добавить")
+                Text(stringResource(id = R.string.add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )

@@ -1,9 +1,6 @@
 package com.financeproject.ui.state
 
 import android.content.SharedPreferences
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.key
-import org.intellij.lang.annotations.Language
 
 data class UIState(
     val sharedPrefs: SharedPreferences,

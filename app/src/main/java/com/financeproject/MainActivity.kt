@@ -25,13 +25,22 @@ import com.financeproject.ui.screens.SplashScreen
 import com.financeproject.ui.state.UIState
 import com.financeproject.ui.theme.FinanceProjectTheme
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import com.financeproject.utils.LocaleHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var financevm: FinanceViewModel
 
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("appSettings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("language", "ru") ?: "ru"
+        val context = LocaleHelper.setLocale(newBase, lang)
+        super.attachBaseContext(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val splashScreen = installSplashScreen()
         var keepSplashScreen = true
 
@@ -49,11 +58,15 @@ class MainActivity : ComponentActivity() {
             this,
             FinanceViewModel.FinanceViewModelFactory(application, uiState)
         )[FinanceViewModel::class.java]
+
         setContent {
+
             var showSplash by remember { mutableStateOf(true) }
+
             val allLoss = financevm.allLoss.collectAsState()
             val allProfit = financevm.allProfit.collectAsState()
             val allOperations = financevm.allOperations.collectAsState()
+
             FinanceProjectTheme(financevm) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedVisibility(

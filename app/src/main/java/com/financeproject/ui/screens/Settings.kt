@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -120,7 +120,7 @@ fun Settings(financevm: FinanceViewModel) {
         }
         if (showChangeLanguage) {
             ChangeLanguage(
-                onPick = { str -> financevm.changeLanguage(str);showChangeLanguage = false },
+                onPick = { str -> financevm.changeLanguage(str); showChangeLanguage = false },
                 onDismiss = { showChangeLanguage = false }
             )
         }
