@@ -35,7 +35,7 @@
 
     <string name="data_reset">data reset</string>
     <string name="reset_message">Are you sure you want to reset the data?</string>
-    <string name="reset">reset</string>
+    <string name="reset">Reset</string>
 
     <string name="amount">Amount</string>
     <string name="description">Description</string>

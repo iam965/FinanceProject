@@ -1,45 +1,45 @@
 <resources>
     <string name="app_name">MMM</string>
 
-    <string name="home_title">Home</string>
-    <string name="total_balance">Total balance</string>
-    <string name="recent_transactions">Recent transactions</string>
+    <string name="home_title">Главная</string>
+    <string name="total_balance">Общий баланс</string>
+    <string name="recent_transactions">Последние операции</string>
 
-    <string name="income_title">Income</string>
-    <string name="income">Income</string>
-    <string name="total_income">Total income</string>
-    <string name="add_income">Add income</string>
+    <string name="income_title">Доходы</string>
+    <string name="income">Доход</string>
+    <string name="total_income">Общий доход</string>
+    <string name="add_income">Добавить доход</string>
 
-    <string name="expense_title">Expense</string>
-    <string name="expense">Expense</string>
-    <string name="total_consumption">Total consumption</string>
-    <string name="add_expense">Add expense</string>
+    <string name="expense_title">Расходы</string>
+    <string name="expense">Расход</string>
+    <string name="total_consumption">Общий расход</string>
+    <string name="add_expense">Добавить расход</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="dark_theme">Dark theme</string>
+    <string name="settings_title">Настройки</string>
+    <string name="dark_theme">Темная тема</string>
 
-    <string name="change_currency">Change currency</string>
+    <string name="change_currency">Сменить валюту</string>
 
-    <string name="currency_selection">Currency selection</string>
-    <string name="ruble">Ruble</string>
-    <string name="dollar">Dollar</string>
-    <string name="euro">Euro</string>
+    <string name="currency_selection">Выбор валюты</string>
+    <string name="ruble">Рубль</string>
+    <string name="dollar">Доллар</string>
+    <string name="euro">Евро</string>
 
-    <string name="change_language">Change language</string>
+    <string name="change_language">Сменить язык</string>
 
-    <string name="language_selection">Language selection</string>
-    <string name="russian">Russian</string>
-    <string name="english">English</string>
+    <string name="language_selection">Выбор языка</string>
+    <string name="russian">Русский</string>
+    <string name="english">Английский</string>
 
-    <string name="reset_data">Reset data</string>
+    <string name="reset_data">Сбросить данные</string>
 
-    <string name="data_reset">data reset</string>
-    <string name="reset_message">Are you sure you want to reset the data?</string>
-    <string name="reset">reset</string>
+    <string name="data_reset">Сброс данных</string>
+    <string name="reset_message">Вы действительно хотите сбросить данные?</string>
+    <string name="reset">Сбросить</string>
 
-    <string name="amount">Amount</string>
-    <string name="description">Description</string>
-    <string name="cancel">Cancel</string>
-    <string name="add">Add</string>
+    <string name="amount">Сумма</string>
+    <string name="description">Описание</string>
+    <string name="cancel">Отмена</string>
+    <string name="add">Добавить</string>
 
 </resources>
