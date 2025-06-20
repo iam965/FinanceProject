@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">MMM</string>
 
     <string name="home_title">Home</string>
@@ -17,7 +18,6 @@
 
     <string name="settings_title">Settings</string>
     <string name="dark_theme">Dark theme</string>
-
     <string name="change_currency">Change currency</string>
 
     <string name="currency_selection">Currency selection</string>
