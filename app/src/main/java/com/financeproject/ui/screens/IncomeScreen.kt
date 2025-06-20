@@ -97,7 +97,8 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String) {
                             onDismiss = { showRemoveDialog = false },
                             onRemoveIncome = {
                                 financevm.deleteOperation(entry); showRemoveDialog = false
-                            })
+                            }
+                        )
                     }
                 }
             }
@@ -226,9 +227,9 @@ private fun RemoveDialog(
     ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Удалить") },
+        title = { Text(stringResource(id=R.string.delete)) },
         text = {
-            Text("Вы действительно хотите удалить операцию?")
+            Text(stringResource(id = R.string.delete_message))
         },
         confirmButton = {
             TextButton(
@@ -236,12 +237,12 @@ private fun RemoveDialog(
                 onRemoveIncome
 
             ) {
-                Text("Да")
+                Text(stringResource(id = R.string.yes))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Нет")
+                Text(stringResource(id = R.string.no))
             }
         }
     )

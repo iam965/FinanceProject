@@ -12,15 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.financeproject.R
 import com.financeproject.data.db.Operation
 import com.financeproject.ui.navigation.FinanceNavigationBar
 import com.financeproject.ui.navigation.NavRoutes
@@ -32,7 +33,6 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
     val navigationBar = FinanceNavigationBar()
     var title by remember { mutableStateOf("Home") }
     val valute = financevm.getValute()
-    val language=financevm.getLanguage()
 
     Scaffold(
         topBar = { navigationBar.TopBar(navController, title,financevm) },
@@ -71,7 +71,7 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
                 ) {
                     navigationBar.currentScreen = "Income"
                     IncomeScreen(financevm, valute)
-                    title = "Доходы"
+                    title = stringResource(id = R.string.income_title)
                 }
                 composable(
                     NavRoutes.Home.route,
@@ -131,7 +131,7 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
                         allLoss = allLoss,
                         valute = valute
                     )
-                    title = "Главная"
+                    title = stringResource(id = R.string.home_title)
                 }
                 composable(
                     NavRoutes.Expense.route,
@@ -164,7 +164,7 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
                 ) {
                     ExpenseScreen(financevm, valute);
                     navigationBar.currentScreen = "Expense"
-                    title = "Расходы"
+                    title = stringResource(id = R.string.expense_title)
                 }
                 composable(NavRoutes.Settings.route, enterTransition = {
                     slideInVertically(
@@ -180,7 +180,7 @@ fun MainScreen(financevm: FinanceViewModel, allLoss: State<List<Operation>>, all
                 {
                     navigationBar.currentScreen = "Settings"
                     Settings(financevm)
-                    title = "Настройки"
+                    title = stringResource(id = R.string.settings_title)
                 }
             }
         }

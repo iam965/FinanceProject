@@ -20,9 +20,11 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.financeproject.R
 import com.financeproject.data.db.Operation
 
 @Composable
@@ -63,7 +65,7 @@ private fun BalanceCard(balance: Double, valute: String) {
                 .fillMaxWidth()
         ) {
             Text(
-                "Общий баланс",
+                stringResource(id = R.string.total_balance),
                 fontSize = 16.sp
             )
             Spacer(Modifier.height(8.dp))
@@ -87,14 +89,14 @@ private fun IncomeExpenseStats(income: Double, expense: Double, valute: String) 
             value = expense,
             sum = income + expense,
             color = Color(0xFFF44336),
-            text = "Расходы",
+            stringResource(id = R.string.expense),
             valute
         )
         Diagram(
             value = income,
             sum = income + expense,
             color = Color(0xFF4CAF50),
-            text = "Доходы",
+            stringResource(id = R.string.income),
             valute
         )
     }
@@ -150,7 +152,7 @@ private fun RecentOperations(operations: List<Operation>, valute: String) {
         modifier = Modifier.padding(16.dp)
     ) {
         Text(
-            "Последние операции",
+            stringResource(id = R.string.recent_transactions),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 8.dp)

@@ -22,7 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.financeproject.R
 import com.financeproject.ui.viewmodels.FinanceViewModel
 
 @Composable
@@ -50,7 +52,7 @@ fun Settings(financevm: FinanceViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Темная тема")
+                Text(stringResource(id = R.string.dark_theme))
                 Switch(checked = isDarkTheme.value, onCheckedChange = { financevm.changeTheme() })
             }
         }
@@ -69,7 +71,7 @@ fun Settings(financevm: FinanceViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Сменить валюту")
+                Text(stringResource(id = R.string.change_currency))
             }
         }
         Card(
@@ -87,7 +89,7 @@ fun Settings(financevm: FinanceViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Сменить язык")
+                Text(stringResource(id = R.string.change_language))
             }
         }
         Card(
@@ -105,7 +107,7 @@ fun Settings(financevm: FinanceViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Сбросить данные")
+                Text(stringResource(id = R.string.reset_data))
             }
         }
         if (showResetDialog) {
@@ -131,22 +133,22 @@ fun Settings(financevm: FinanceViewModel) {
 private fun ResetDialog(onDismiss: () -> Unit, onReset: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Сброс данных") },
+        title = { stringResource(id = R.string.data_reset) },
         text = {
             Column {
-                Text("Вы действительно хотите сбросить данные?")
+                Text(stringResource(id = R.string.reset_message))
             }
         },
         confirmButton = {
             TextButton(
                 onClick = onReset
             ) {
-                Text("Сбросить")
+                Text(stringResource(id = R.string.reset))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )
@@ -156,7 +158,7 @@ private fun ResetDialog(onDismiss: () -> Unit, onReset: () -> Unit) {
 private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Выбор валюты") },
+        title = { stringResource(id = R.string.currency_selection)},
         text = {
             Column(
                 modifier = Modifier
@@ -165,21 +167,21 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Рубль",
+                    text = stringResource(id = R.string.ruble),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp)
                         .clickable { onPick("₽") })
                 Divider()
                 Text(
-                    text = "Доллар",
+                    text = stringResource(id = R.string.dollar),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp)
                         .clickable { onPick("$") })
                 Divider()
                 Text(
-                    text = "Евро",
+                    text = stringResource(id = R.string.euro),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp)
@@ -189,7 +191,7 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
         confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )
@@ -199,7 +201,7 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
 private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Выбор языка") },
+        title = { stringResource(id = R.string.language_selection) },
         text = {
             Column(
                 modifier = Modifier
@@ -208,7 +210,7 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Русский",
+                    text = stringResource(id = R.string.russian),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp)
@@ -216,7 +218,7 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
                 )
                 Divider()
                 Text(
-                    text = "Английский",
+                    text = stringResource(id = R.string.english),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp)
@@ -228,7 +230,7 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
         confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )

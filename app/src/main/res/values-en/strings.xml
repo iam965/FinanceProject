@@ -13,7 +13,7 @@
 
     <string name="expense_title">Expense</string>
     <string name="expense">Expense</string>
-    <string name="total_consumption">Total consumption</string>
+    <string name="total_expense">Total expense</string>
     <string name="add_expense">Add expense</string>
 
     <string name="settings_title">Settings</string>
@@ -41,5 +41,10 @@
     <string name="description">Description</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
+
+    <string name="delete">Delete</string>
+    <string name="delete_message">Are you sure you want to delete the operation?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 
 </resources>
