@@ -43,9 +43,18 @@ import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 import com.financeproject.logic.functions.checkPeriod
+import com.financeproject.ui.navigation.DatePanel
 
 @Composable
-fun ExpenseScreen(financevm: FinanceViewModel, allLoss: List<Operation>, valute: String, beg: Long, end: Long) {
+fun ExpenseScreen(
+    financevm: FinanceViewModel,
+    allLoss: List<Operation>,
+    valute: String,
+    beg: Long,
+    end: Long,
+    date: String,
+    onDateClick: () -> Unit
+) {
     //val allLoss by financevm.allLoss.collectAsState()
     var begPeriod = DateFormat.getDateFromMillis(beg)
     var endPeriod = DateFormat.getDateFromMillis(end)
@@ -59,6 +68,7 @@ fun ExpenseScreen(financevm: FinanceViewModel, allLoss: List<Operation>, valute:
                 .fillMaxSize()
 
         ) {
+            DatePanel(date, onClick = onDateClick)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

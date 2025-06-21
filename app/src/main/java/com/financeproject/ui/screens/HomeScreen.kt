@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.logic.functions.checkPeriod
+import com.financeproject.ui.navigation.DatePanel
 
 @Composable
 fun HomeScreen(
@@ -34,7 +35,9 @@ fun HomeScreen(
     allOperations: State<List<Operation>>,
     valute: String,
     beg: Long,
-    end: Long
+    end: Long,
+    date: String,
+    onDateClick: () -> Unit
 ) {
     var begPeriod = DateFormat.getDateFromMillis(beg)
     var endPeriod = DateFormat.getDateFromMillis(end)
@@ -49,6 +52,8 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        DatePanel(date, onClick = onDateClick)
+
         BalanceCard(balance, valute)
 
         IncomeExpenseStats(profit, loss, valute)

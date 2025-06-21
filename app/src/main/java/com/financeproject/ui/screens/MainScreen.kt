@@ -19,15 +19,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DateRangePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -78,48 +81,63 @@ fun MainScreen(
             LocalDate.now().withDayOfMonth(1)
         ),
         initialSelectedEndDateMillis = DateFormat.getMillisFromDate(
-            LocalDate.now().withDayOfMonth(1).plusMonths(1).minusDays(1)
+            LocalDate.now()
         )
     )
-    var begPeriod by remember { mutableStateOf(dateState.selectedStartDateMillis)}
-    var endPeriod by remember { mutableStateOf(dateState.selectedEndDateMillis)}
+    var begPeriod by remember { mutableStateOf(dateState.selectedStartDateMillis) }
+    var endPeriod by remember { mutableStateOf(dateState.selectedEndDateMillis) }
+    var dateString by remember {
+        mutableStateOf(
+            DateFormat.getDateString(
+                DateFormat.getDateFromMillis(
+                    begPeriod!!
+                )
+            ) + " - " + DateFormat.getDateString(DateFormat.getDateFromMillis(endPeriod!!))
+        )
+    }
     Scaffold(
         topBar = { navigationBar.TopBar(navController, title, financevm) },
         bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Column {
-                var abc by remember { mutableStateOf(DateFormat.getDateString(DateFormat.getDateFromMillis(begPeriod!!)) + " " + DateFormat.getDateString(DateFormat.getDateFromMillis(endPeriod!!)))}
-                Text(
-                    abc,
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { showPicker = true }
-                )
                 if (showPicker) {
                     DatePickerDialog(
                         onDismissRequest = { showPicker = false },
-                        confirmButton = {
-                            Button(onClick = {
-                                begPeriod = dateState.selectedStartDateMillis;
-                                endPeriod = dateState.selectedEndDateMillis;
-                                abc = DateFormat.getDateString(DateFormat.getDateFromMillis(begPeriod!!)) + " " + DateFormat.getDateString(DateFormat.getDateFromMillis(endPeriod!!))
-                                showPicker = false;
-                            }) { Text("OK") }
-                        },
-                        dismissButton = {
-                            Button(onClick = { showPicker = false }) { Text("Cancel") }
-                        }
+                        confirmButton = {},
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        DateRangePicker(
-                            state = dateState,
-                            showModeToggle = true,
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .height(500.dp),
-                            title = null,
-                            headline = null
-                        )
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            DateRangePicker(
+                                state = dateState,
+                                showModeToggle = false,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(400.dp),
+                                title = null
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp)
+                            ) {
+                                Button(onClick = { showPicker = false }) { Text("Cancel") }
+                                Button(onClick = {
+                                    begPeriod = dateState.selectedStartDateMillis;
+                                    endPeriod = dateState.selectedEndDateMillis;
+                                    dateString = DateFormat.getDateString(
+                                        DateFormat.getDateFromMillis(begPeriod!!)
+                                    ) + " " + DateFormat.getDateString(
+                                        DateFormat.getDateFromMillis(
+                                            endPeriod!!
+                                        )
+                                    )
+                                    showPicker = false;
+                                }) { Text("OK") }
+                            }
+                        }
                     }
                 }
             }
@@ -154,7 +172,14 @@ fun MainScreen(
                     }
                 ) {
                     navigationBar.currentScreen = "Income"
-                    IncomeScreen(financevm, valute, beg = begPeriod!!, end = endPeriod!!)
+                    IncomeScreen(
+                        financevm = financevm,
+                        valute,
+                        beg = begPeriod!!,
+                        end = endPeriod!!,
+                        date = dateString,
+                        onDateClick = {showPicker = true}
+                    )
                     title = "Доходы"
                 }
                 composable(
@@ -215,7 +240,9 @@ fun MainScreen(
                         allLoss = allLoss,
                         valute = valute,
                         beg = begPeriod!!,
-                        end = endPeriod!!
+                        end = endPeriod!!,
+                        date = dateString,
+                        onDateClick = { showPicker = true }
                     )
                     title = "Главная"
                 }
@@ -248,7 +275,15 @@ fun MainScreen(
                         }
                     }
                 ) {
-                    ExpenseScreen(financevm, valute = valute, beg = begPeriod!!, end = endPeriod!!, allLoss = allLoss.value);
+                    ExpenseScreen(
+                        financevm,
+                        valute = valute,
+                        beg = begPeriod!!,
+                        end = endPeriod!!,
+                        allLoss = allLoss.value,
+                        date = dateString,
+                        onDateClick = {showPicker = true}
+                    );
                     navigationBar.currentScreen = "Expense"
                     title = "Расходы"
                 }

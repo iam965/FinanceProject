@@ -39,10 +39,18 @@ import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.time.LocalDateTime
 import com.financeproject.logic.functions.checkPeriod
+import com.financeproject.ui.navigation.DatePanel
 import java.time.LocalDate
 
 @Composable
-fun IncomeScreen(financevm: FinanceViewModel, valute: String, beg: Long, end: Long) {
+fun IncomeScreen(
+    financevm: FinanceViewModel,
+    valute: String,
+    beg: Long,
+    end: Long,
+    date: String,
+    onDateClick: () -> Unit
+) {
     val allIncome by financevm.allProfit.collectAsState()
     var begPeriod = DateFormat.getDateFromMillis(beg)
     var endPeriod = DateFormat.getDateFromMillis(end)
@@ -56,6 +64,7 @@ fun IncomeScreen(financevm: FinanceViewModel, valute: String, beg: Long, end: Lo
                 .fillMaxSize()
 
         ) {
+            DatePanel(date = date, onClick = onDateClick)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
