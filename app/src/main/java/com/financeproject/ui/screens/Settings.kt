@@ -1,5 +1,6 @@
 package com.financeproject.ui.screens
 
+import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
@@ -33,6 +35,8 @@ fun Settings(financevm: FinanceViewModel) {
     var showValutePicker by remember { mutableStateOf(false) }
     var showChangeLanguage by remember { mutableStateOf(false) }
     val isDarkTheme by remember { mutableStateOf(financevm.isDarkTheme) }
+    val context = LocalContext.current
+    val activity = context as? Activity
 
     Column(
         modifier = Modifier
@@ -122,7 +126,7 @@ fun Settings(financevm: FinanceViewModel) {
         }
         if (showChangeLanguage) {
             ChangeLanguage(
-                onPick = { str -> financevm.changeLanguage(str); showChangeLanguage = false },
+                onPick = { lang -> financevm.changeLanguage(lang); activity?.recreate(); showChangeLanguage = false },
                 onDismiss = { showChangeLanguage = false }
             )
         }

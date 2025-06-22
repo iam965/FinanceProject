@@ -28,6 +28,10 @@ import com.financeproject.ui.viewmodels.FinanceViewModel
 import com.financeproject.utils.LocaleHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import androidx.core.content.edit
 
 class MainActivity : ComponentActivity() {
     private lateinit var financevm: FinanceViewModel
@@ -40,7 +44,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val splashScreen = installSplashScreen()
         var keepSplashScreen = true
 
@@ -60,6 +63,14 @@ class MainActivity : ComponentActivity() {
         )[FinanceViewModel::class.java]
 
         setContent {
+            val prefs = getSharedPreferences("appSettings", Context.MODE_PRIVATE)
+            val isChangeLanguage = prefs.getBoolean("isChangeLanguage", false)
+
+            val splashDuration = if (isChangeLanguage) {
+                300.milliseconds
+            } else {
+                2.seconds
+            }
 
             var showSplash by remember { mutableStateOf(true) }
 
@@ -77,23 +88,29 @@ class MainActivity : ComponentActivity() {
                         SplashScreen(
                             onSplashFinished = {
                                 showSplash = false
-                            }
+                                prefs.edit{putBoolean("isChangeLanguage",true)}
+
+                            },
+                            splashDuration = splashDuration
                         )
                     }
-
                     AnimatedVisibility(
                         visible = !showSplash,
                         enter = fadeIn(animationSpec = tween(700)),
                         exit = fadeOut(animationSpec = tween(500))
                     ) {
-                        MainScreen(financevm = financevm, allProfit = allProfit, allLoss = allLoss, allOperations = allOperations)
+                        MainScreen(
+                            financevm = financevm,
+                            allProfit = allProfit,
+                            allLoss = allLoss,
+                            allOperations = allOperations
+                        )
                     }
                 }
             }
         }
     }
 }
-
 
 
 /*

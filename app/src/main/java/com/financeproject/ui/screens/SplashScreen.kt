@@ -14,11 +14,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import com.airbnb.lottie.compose.*
 import kotlinx.coroutines.delay
+import kotlin.time.Duration
 
 @Composable
 fun SplashScreen(
     onSplashFinished: () -> Unit,
-    isTest: Boolean = false
+    isTest: Boolean = false,
+    splashDuration: Duration
 ) {
     // Skip animation loading in test mode
     if (isTest) {
@@ -48,7 +50,7 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(200)
         isPlaying = true
-        delay(3000)
+        delay(splashDuration)
 
         animate(
             initialValue = 1f,
@@ -75,7 +77,7 @@ fun SplashScreen(
         LottieAnimation(
             composition = composition,
             isPlaying = isPlaying,
-            iterations = 4,
+            iterations = 3,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(alpha = alpha)
