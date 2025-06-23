@@ -7,20 +7,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import com.airbnb.lottie.compose.*
 import kotlinx.coroutines.delay
-import kotlin.time.Duration
 
 @Composable
 fun SplashScreen(
     onSplashFinished: () -> Unit,
     isTest: Boolean = false,
-    splashDuration: Duration
 ) {
     // Skip animation loading in test mode
     if (isTest) {
@@ -44,24 +49,25 @@ fun SplashScreen(
     )
 
     var isPlaying by remember { mutableStateOf(false) }
-    var alpha by remember { mutableStateOf(1f) }
+    var alpha by remember { mutableFloatStateOf(1f) }
     var backgroundColor = MaterialTheme.colorScheme.background
 
     LaunchedEffect(Unit) {
-        delay(200)
+
+        //delay(200)
         isPlaying = true
-        delay(splashDuration)
+        delay(1500)
 
         animate(
             initialValue = 1f,
             targetValue = 0f,
             animationSpec = tween(
-                durationMillis = 1000,
+                durationMillis =  1200,
                 easing = LinearEasing
             )
         ) { value, _ ->
             alpha = value
-            backgroundColor = backgroundColor.copy(alpha = 1f - value)
+            backgroundColor = backgroundColor.copy(alpha = 1f-value)
         }
 
         onSplashFinished()
