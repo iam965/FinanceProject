@@ -97,11 +97,11 @@ fun IncomeScreen(
                 text = { Text("Добавить доход") },
                 onClick = { showAddDialog = true }
             )
-            HorizontalDivider(Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 15.dp), thickness = 3.dp)
+            HorizontalDivider(Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 0.dp), thickness = 1.dp)
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                    .padding(vertical = 5.dp, horizontal = 5.dp)
             ) {
                 items(periodIncome.reversed()) { entry ->
                     var showRemoveDialog by remember { mutableStateOf(false) }
@@ -144,6 +144,7 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         Row(
             modifier = Modifier
