@@ -56,7 +56,7 @@ fun IncomeScreen(
     var endPeriod = DateFormat.getDateFromMillis(end)
     var periodIncome = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allIncome)
     var showAddDialog by remember { mutableStateOf(false) }
-    var totalIncome = allIncome.sumOf { it.value }
+    var totalIncome = periodIncome.sumOf { it.value }
 
     Column {
         Column(
