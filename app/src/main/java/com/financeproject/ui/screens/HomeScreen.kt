@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -58,6 +60,8 @@ fun HomeScreen(
 
         IncomeExpenseStats(profit, loss, valute)
 
+        HorizontalDivider(Modifier.padding(horizontal = 5.dp, vertical = 10.dp), thickness = 1.dp)
+
         RecentOperations(periodOperations, valute)
     }
 }
@@ -67,23 +71,23 @@ private fun BalanceCard(balance: Double, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(10.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(24.dp)
+                .padding(12.dp)
                 .fillMaxWidth()
         ) {
             Text(
                 "Общий баланс",
                 fontSize = 16.sp
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 "%.2f".format(balance) + valute,
                 color = if (balance >= 0) Color(0xFF4CAF50) else Color(0xFFF44336),
-                fontSize = 28.sp
+                fontSize = 24.sp
             )
         }
     }
@@ -91,21 +95,22 @@ private fun BalanceCard(balance: Double, valute: String) {
 
 @Composable
 private fun IncomeExpenseStats(income: Double, expense: Double, valute: String) {
+    var max = findmax(income, expense)
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(if (max == 0.0) {68.dp} else {170.dp}),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.Bottom
     ) {
         Diagram(
             value = expense,
-            sum = income + expense,
+            sum = max,
             color = Color(0xFFF44336),
             text = "Расходы",
             valute
         )
         Diagram(
             value = income,
-            sum = income + expense,
+            sum = max,
             color = Color(0xFF4CAF50),
             text = "Доходы",
             valute
@@ -118,7 +123,7 @@ private fun Diagram(value: Double, sum: Double, color: Color, text: String, valu
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Column(
             modifier = Modifier
-                .height((150 * value / sum).dp)
+                .height((100 * value / sum).dp)
                 .width(30.dp)
                 .background(
                     color = color,
@@ -138,16 +143,19 @@ private fun Diagram(value: Double, sum: Double, color: Color, text: String, valu
 @Composable
 private fun StatCard(title: String, value: Double, color: Color, valute: String) {
     Card(
-        modifier = Modifier.width(150.dp)
+        modifier = Modifier
+            .width(150.dp)
+            .height(68.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(12.dp)
+                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .padding(8.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(title)
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(2.dp))
             Text(
                 text = "%.2f".format(value) + valute,
                 color = color,
@@ -160,7 +168,7 @@ private fun StatCard(title: String, value: Double, color: Color, valute: String)
 @Composable
 private fun RecentOperations(operations: List<Operation>, valute: String) {
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(start = 15.dp, end = 15.dp, top = 5.dp)
     ) {
         Text(
             "Последние операции",
@@ -208,4 +216,9 @@ private fun OperationItem(operation: Operation, valute: String) {
             )
         }
     }
+}
+
+private fun findmax(income: Double, expense: Double): Double{
+    return if (income > expense) income
+    else expense
 }

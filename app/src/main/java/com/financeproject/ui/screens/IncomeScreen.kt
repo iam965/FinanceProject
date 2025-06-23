@@ -69,7 +69,7 @@ fun IncomeScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 5.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -88,16 +88,16 @@ fun IncomeScreen(
                     )
                 }
             }
+            HorizontalDivider(Modifier.padding(5.dp), thickness = 1.dp)
             ExtendedFloatingActionButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp, vertical = 0.dp),
+                    .padding(start = 15.dp, end = 15.dp, top = 5.dp, bottom = 10.dp),
 
                 icon = { Icon(Icons.Default.Add, contentDescription = "add") },
                 text = { Text("Добавить доход") },
                 onClick = { showAddDialog = true }
             )
-            HorizontalDivider(Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 0.dp), thickness = 1.dp)
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
