@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,12 +69,12 @@ fun IncomeScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(10.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -90,16 +91,17 @@ fun IncomeScreen(
             ExtendedFloatingActionButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(horizontal = 15.dp, vertical = 0.dp),
 
                 icon = { Icon(Icons.Default.Add, contentDescription = "add") },
                 text = { Text("Добавить доход") },
                 onClick = { showAddDialog = true }
             )
+            HorizontalDivider(Modifier.padding(start = 5.dp, end = 5.dp, top = 10.dp, bottom = 15.dp), thickness = 3.dp)
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(vertical = 5.dp, horizontal = 10.dp)
             ) {
                 items(periodIncome.reversed()) { entry ->
                     var showRemoveDialog by remember { mutableStateOf(false) }
@@ -142,7 +144,6 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier
