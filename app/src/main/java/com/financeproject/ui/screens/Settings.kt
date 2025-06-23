@@ -24,10 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import org.intellij.lang.annotations.Language
 
 @Composable
 fun Settings(financevm: FinanceViewModel) {
@@ -36,6 +38,8 @@ fun Settings(financevm: FinanceViewModel) {
     var showChangeLanguage by remember { mutableStateOf(false) }
     val isDarkTheme by remember { mutableStateOf(financevm.isDarkTheme) }
     val context = LocalContext.current
+    val currentLanguage = financevm.getLanguage()
+    val currentValute =financevm.getValute()
     val activity = context as? Activity
 
     Column(
@@ -127,7 +131,7 @@ fun Settings(financevm: FinanceViewModel) {
         if (showChangeLanguage) {
             ChangeLanguage(
                 onPick = { lang -> financevm.changeLanguage(lang); activity?.recreate(); showChangeLanguage = false },
-                onDismiss = { showChangeLanguage = false }
+                onDismiss = { showChangeLanguage = false },currentLanguage=currentLanguage
             )
         }
     }
@@ -202,7 +206,7 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
+private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit,currentLanguage: String) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { stringResource(id = R.string.language_selection) },
@@ -215,18 +219,45 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit) {
             ) {
                 Text(
                     text = stringResource(id = R.string.russian),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = if (currentLanguage=="ru"){
+                            MaterialTheme.colorScheme.primary
+                        }
+                        else{
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    ),
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onPick("ru") }
+                        .clickable {
+                            if (currentLanguage != "ru") {
+                                onPick("ru")
+                            } else {
+                                onDismiss()
+                            }
+                        }
                 )
                 Divider()
                 Text(
                     text = stringResource(id = R.string.english),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = if (currentLanguage=="en"){
+                            MaterialTheme.colorScheme.primary
+                        }
+                        else{
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    ),
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onPick("en") }
+                        .clickable {
+                            if (currentLanguage!="en"){
+                                onPick("en")
+                            }
+                            else {
+                                onDismiss()
+                            }
+                        }
                 )
 
             }

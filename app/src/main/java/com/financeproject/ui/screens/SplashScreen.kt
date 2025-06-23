@@ -57,7 +57,6 @@ fun SplashScreen(
         //delay(200)
         isPlaying = true
         delay(1500)
-
         animate(
             initialValue = 1f,
             targetValue = 0f,
