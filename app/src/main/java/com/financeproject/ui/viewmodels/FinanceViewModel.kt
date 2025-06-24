@@ -12,6 +12,8 @@ import com.financeproject.data.api.CurrencyRepository
 import com.financeproject.data.db.FinanceDataBase
 import com.financeproject.data.db.Operation
 import com.financeproject.data.db.OperationRepository
+import com.financeproject.data.db.Category
+import com.financeproject.data.db.CategoryRepository
 import com.financeproject.ui.state.CurrencyState
 import com.financeproject.ui.state.UIState
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +25,12 @@ import kotlinx.coroutines.launch
 class FinanceViewModel(application: Application, private val UiState: UIState) :
     AndroidViewModel(application) {
     private val operationRepository: OperationRepository
+    private val categoryRepository: CategoryRepository
     val allProfit: StateFlow<List<Operation>>
     val allLoss: StateFlow<List<Operation>>
     val allOperations: StateFlow<List<Operation>>
+    val allProfitCategory: StateFlow<List<Category>>
+    val allLossCategory: StateFlow<List<Category>>
     private val _isDarkTheme = mutableStateOf(UiState.isDarkTheme)
     val isDarkTheme: State<Boolean> = _isDarkTheme
     private val _valute: MutableState<String?> = mutableStateOf(UiState.selectedValute)
@@ -35,7 +40,9 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
     init {
         val operationDao = FinanceDataBase.getDatabase(application).getOperationDao()
         val currencyDao = FinanceDataBase.getDatabase(application).getCurrencyDao()
+        val categoryDao = FinanceDataBase.getDatabase(application).getCategoryDao()
         operationRepository = OperationRepository(operationDao)
+        categoryRepository = CategoryRepository(categoryDao)
         currencyRepository = CurrencyRepository(currencyDao = currencyDao)
         allProfit = operationRepository.allProfit.stateIn(
             viewModelScope,
@@ -48,6 +55,16 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
             emptyList()
         )
         allOperations = operationRepository.allOperations.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
+        allProfitCategory = categoryRepository.allProfitCategory.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
+        allLossCategory = categoryRepository.allLossCategory.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             emptyList()
