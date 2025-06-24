@@ -1,6 +1,5 @@
 package com.financeproject.ui.screens
 
-import android.os.Build
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
@@ -18,25 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import com.airbnb.lottie.LottieProperty
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.airbnb.lottie.compose.rememberLottieDynamicProperties
-import com.airbnb.lottie.compose.rememberLottieDynamicProperty
-import com.financeproject.ui.viewmodels.FinanceViewModel
+import com.airbnb.lottie.compose.*
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     onSplashFinished: () -> Unit,
-    financeViewModel: FinanceViewModel,
-    isTest: Boolean = false
+    isTest: Boolean = false,
 ) {
     // Skip animation loading in test mode
     if (isTest) {
@@ -46,7 +35,7 @@ fun SplashScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.onBackground)
+                .background(MaterialTheme.colorScheme.background)
                 .testTag("splashScreen"),
             contentAlignment = Alignment.Center
         ) {
@@ -55,32 +44,8 @@ fun SplashScreen(
         return
     }
 
-    val context = LocalContext.current
-    val isDarkTheme by financeViewModel.isDarkTheme
-
-    val animationAsset = if (isDarkTheme) "SplashAnimDark.json" else "SplashAnim.json"
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.Asset(animationAsset)
-    )
-    val systemColor = if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
-        val systemColorRes=if (isDarkTheme){
-            android.R.color.system_accent1_600
-        }
-        else{
-            android.R.color.system_accent1_200
-        }
-        Color(context.resources.getColor(systemColorRes,null))
-    }
-    else{
-        Color.Red
-    }
-
-    val dynamicProperties= rememberLottieDynamicProperties(
-        rememberLottieDynamicProperty(
-            property = LottieProperty.COLOR,
-            value = systemColor.toArgb(),
-            keyPath = arrayOf("**","Ellipse 1","Fill 1")
-        )
+        LottieCompositionSpec.Asset("SplashAnim.json")
     )
 
     var isPlaying by remember { mutableStateOf(false) }
@@ -88,21 +53,22 @@ fun SplashScreen(
     var backgroundColor = MaterialTheme.colorScheme.background
 
     LaunchedEffect(Unit) {
-        delay(200)
-        isPlaying = true
-        delay(3000)
 
+        //delay(200)
+        isPlaying = true
+        delay(1500)
         animate(
             initialValue = 1f,
             targetValue = 0f,
             animationSpec = tween(
-                durationMillis = 1000,
+                durationMillis =  1200,
                 easing = LinearEasing
             )
         ) { value, _ ->
             alpha = value
-            backgroundColor = backgroundColor.copy(alpha = 1f - value)
+            backgroundColor = backgroundColor.copy(alpha = 1f-value)
         }
+
         onSplashFinished()
     }
 
@@ -116,12 +82,11 @@ fun SplashScreen(
         LottieAnimation(
             composition = composition,
             isPlaying = isPlaying,
-            iterations = 4,
+            iterations = 3,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(alpha = alpha)
-                .testTag("splashAnimation"),
-            dynamicProperties = dynamicProperties
+                .testTag("splashAnimation")
         )
     }
 }

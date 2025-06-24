@@ -1,0 +1,50 @@
+<resources>
+
+    <string name="app_name">MMM</string>
+
+    <string name="home_title">Home</string>
+    <string name="total_balance">Total balance</string>
+    <string name="recent_transactions">Recent transactions</string>
+
+    <string name="income_title">Income</string>
+    <string name="income">Income</string>
+    <string name="total_income">Total income</string>
+    <string name="add_income">Add income</string>
+
+    <string name="expense_title">Expense</string>
+    <string name="expense">Expense</string>
+    <string name="total_expense">Total expense</string>
+    <string name="add_expense">Add expense</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="change_currency">Change currency</string>
+
+    <string name="currency_selection">Currency selection</string>
+    <string name="ruble">Ruble</string>
+    <string name="dollar">Dollar</string>
+    <string name="euro">Euro</string>
+
+    <string name="change_language">Change language</string>
+
+    <string name="language_selection">Language selection</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+
+    <string name="reset_data">Reset data</string>
+
+    <string name="data_reset">data reset</string>
+    <string name="reset_message">Are you sure you want to reset the data?</string>
+    <string name="reset">Reset</string>
+
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+
+    <string name="delete">Delete</string>
+    <string name="delete_message">Are you sure you want to delete the operation?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
+</resources>
