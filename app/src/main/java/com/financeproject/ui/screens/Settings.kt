@@ -124,7 +124,7 @@ fun Settings(financevm: FinanceViewModel) {
         if (showValutePicker) {
             ValutePicker(
                 onPick = { str -> financevm.changeValute(str); showValutePicker = false },
-                onDismiss = { showValutePicker = false })
+                onDismiss = { showValutePicker = false },currentValute=currentValute)
         }
         if (showChangeLanguage) {
             ChangeLanguage(
@@ -161,7 +161,7 @@ private fun ResetDialog(onDismiss: () -> Unit, onReset: () -> Unit) {
 }
 
 @Composable
-private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
+private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit,currentValute: String) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { stringResource(id = R.string.currency_selection)},
@@ -174,24 +174,64 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit) {
             ) {
                 Text(
                     text = stringResource(id = R.string.ruble),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = if (currentValute=="₽"){
+                            MaterialTheme.colorScheme.primary
+                        }else{
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    ),
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onPick("₽") })
+                        .clickable {
+                            if (currentValute!="₽"){
+                                onPick("₽")
+                            }else{
+                                onDismiss()
+                            }
+                        }
+                )
                 Divider()
                 Text(
                     text = stringResource(id = R.string.dollar),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = if (currentValute=="$"){
+                            MaterialTheme.colorScheme.primary
+                        }else{
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    ),
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onPick("$") })
+                        .clickable {
+                            if (currentValute!="$"){
+                                onPick("$")
+                            }else{
+                                onDismiss()
+                            }
+                        }
+                )
                 Divider()
                 Text(
                     text = stringResource(id = R.string.euro),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = if (currentValute=="€"){
+                            MaterialTheme.colorScheme.primary
+                        }
+                        else{
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    ),
                     modifier = Modifier
                         .padding(10.dp)
-                        .clickable { onPick("€") })
+                        .clickable {
+                            if (currentValute != "€") {
+                                onPick("€")
+                            } else {
+                                onDismiss()
+                            }
+                        }
+                )
             }
         },
         confirmButton = {},
