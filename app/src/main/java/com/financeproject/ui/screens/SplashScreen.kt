@@ -90,7 +90,7 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(200)
         isPlaying = true
-        delay(3000)
+        delay(1500)
 
         animate(
             initialValue = 1f,

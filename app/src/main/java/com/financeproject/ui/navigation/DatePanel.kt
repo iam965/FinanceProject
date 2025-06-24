@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.financeproject.R
 
 @Composable
 fun DatePanel(date: String, onClick: () -> Unit) {
@@ -29,7 +31,7 @@ fun DatePanel(date: String, onClick: () -> Unit) {
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Text("Выбранный период")
+            Text(stringResource(id = R.string.selected_period))
             Text(date)
         }
     }

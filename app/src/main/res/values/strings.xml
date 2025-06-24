@@ -46,5 +46,8 @@
     <string name="delete_message">Вы действительно хотите удалить операцию?</string>
     <string name="no">Нет</string>
     <string name="yes">Да</string>
+    <string name="ok">Ок</string>
+
+    <string name="selected_period">Выбранный период</string>
 
 </resources>

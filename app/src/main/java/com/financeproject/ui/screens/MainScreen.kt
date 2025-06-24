@@ -47,11 +47,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.financeproject.R
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.navigation.FinanceNavigationBar
@@ -123,7 +125,7 @@ fun MainScreen(
                                     .fillMaxWidth()
                                     .padding(10.dp)
                             ) {
-                                Button(onClick = { showPicker = false }) { Text("Cancel") }
+                                Button(onClick = { showPicker = false }) { Text(stringResource(id = R.string.cancel)) }
                                 Button(onClick = {
                                     begPeriod = dateState.selectedStartDateMillis;
                                     endPeriod = dateState.selectedEndDateMillis;
@@ -135,7 +137,7 @@ fun MainScreen(
                                         )
                                     )
                                     showPicker = false;
-                                }) { Text("OK") }
+                                }) { Text(stringResource(id= R.string.ok)) }
                             }
                         }
                     }
@@ -180,7 +182,7 @@ fun MainScreen(
                         date = dateString,
                         onDateClick = {showPicker = true}
                     )
-                    title = "Доходы"
+                    title = stringResource(id = R.string.income_title)
                 }
                 composable(
                     NavRoutes.Home.route,
@@ -244,7 +246,7 @@ fun MainScreen(
                         date = dateString,
                         onDateClick = { showPicker = true }
                     )
-                    title = "Главная"
+                    title = stringResource(id = R.string.home_title)
                 }
                 composable(
                     NavRoutes.Expense.route,
@@ -285,7 +287,7 @@ fun MainScreen(
                         onDateClick = {showPicker = true}
                     );
                     navigationBar.currentScreen = "Expense"
-                    title = "Расходы"
+                    title = stringResource(id = R.string.expense_title)
                 }
                 composable(NavRoutes.Settings.route, enterTransition = {
                     slideInVertically(
@@ -301,7 +303,7 @@ fun MainScreen(
                 {
                     navigationBar.currentScreen = "Settings"
                     Settings(financevm)
-                    title = "Настройки"
+                    title = stringResource(id = R.string.settings_title)
                 }
             }
         }
