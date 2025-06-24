@@ -33,7 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.financeproject.R
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
@@ -78,7 +80,7 @@ fun IncomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Общий доход",
+                        stringResource(id=R.string.total_income),
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
@@ -95,7 +97,7 @@ fun IncomeScreen(
                     .padding(start = 15.dp, end = 15.dp, top = 5.dp, bottom = 10.dp),
 
                 icon = { Icon(Icons.Default.Add, contentDescription = "add") },
-                text = { Text("Добавить доход") },
+                text = { Text(stringResource(id=R.string.add_income)) },
                 onClick = { showAddDialog = true }
             )
             LazyColumn(
@@ -111,7 +113,8 @@ fun IncomeScreen(
                             onDismiss = { showRemoveDialog = false },
                             onRemoveIncome = {
                                 financevm.deleteOperation(entry); showRemoveDialog = false
-                            })
+                            }
+                        )
                     }
                 }
             }
@@ -187,13 +190,13 @@ private fun IncomeDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Добавить доход") },
+        title = { Text(stringResource(id=R.string.add_income))},
         text = {
             Column {
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
-                    label = { Text("Сумма") },
+                    label = { Text(stringResource(id = R.string.amount)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardOptions.Default.keyboardType
@@ -204,7 +207,7 @@ private fun IncomeDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Описание") },
+                    label = { Text(stringResource(id=R.string.description)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -219,12 +222,12 @@ private fun IncomeDialog(
                     }
                 }
             ) {
-                Text("Добавить")
+                Text(stringResource(id = R.string.add))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(id = R.string.cancel))
             }
         }
     )
@@ -238,9 +241,9 @@ private fun RemoveDialog(
     ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Удалить") },
+        title = { Text(stringResource(id=R.string.delete)) },
         text = {
-            Text("Вы действительно хотите удалить операцию?")
+            Text(stringResource(id = R.string.delete_message))
         },
         confirmButton = {
             TextButton(
@@ -248,12 +251,12 @@ private fun RemoveDialog(
                 onRemoveIncome
 
             ) {
-                Text("Да")
+                Text(stringResource(id = R.string.yes))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Нет")
+                Text(stringResource(id = R.string.no))
             }
         }
     )
