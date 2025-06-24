@@ -125,19 +125,26 @@ fun MainScreen(
                                     .fillMaxWidth()
                                     .padding(10.dp)
                             ) {
-                                Button(onClick = { showPicker = false }) { Text(stringResource(id = R.string.cancel)) }
                                 Button(onClick = {
-                                    begPeriod = dateState.selectedStartDateMillis;
-                                    endPeriod = dateState.selectedEndDateMillis;
-                                    dateString = DateFormat.getDateString(
-                                        DateFormat.getDateFromMillis(begPeriod!!)
-                                    ) + " " + DateFormat.getDateString(
-                                        DateFormat.getDateFromMillis(
-                                            endPeriod!!
+                                    showPicker = false
+                                }) { Text(stringResource(id = R.string.cancel)) }
+                                Button(
+                                    onClick = {
+                                        begPeriod = dateState.selectedStartDateMillis;
+                                        endPeriod = dateState.selectedEndDateMillis;
+                                        dateString = DateFormat.getDateString(
+                                            DateFormat.getDateFromMillis(begPeriod!!)
+                                        ) + " " + DateFormat.getDateString(
+                                            DateFormat.getDateFromMillis(
+                                                endPeriod!!
+                                            )
                                         )
-                                    )
-                                    showPicker = false;
-                                }) { Text(stringResource(id= R.string.ok)) }
+                                        showPicker = false;
+
+                                    },
+                                    enabled = dateState.selectedStartDateMillis != null &&
+                                            dateState.selectedEndDateMillis != null
+                                ) { Text(stringResource(id = R.string.ok)) }
                             }
                         }
                     }
@@ -180,7 +187,7 @@ fun MainScreen(
                         beg = begPeriod!!,
                         end = endPeriod!!,
                         date = dateString,
-                        onDateClick = {showPicker = true}
+                        onDateClick = { showPicker = true }
                     )
                     title = stringResource(id = R.string.income_title)
                 }
@@ -284,7 +291,7 @@ fun MainScreen(
                         end = endPeriod!!,
                         allLoss = allLoss.value,
                         date = dateString,
-                        onDateClick = {showPicker = true}
+                        onDateClick = { showPicker = true }
                     );
                     navigationBar.currentScreen = "Expense"
                     title = stringResource(id = R.string.expense_title)
