@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import com.financeproject.R
 import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
-import com.financeproject.logic.dateTime.DateFormat
-import com.financeproject.logic.functions.checkPeriod
-import com.financeproject.logic.functions.findCategory
+import com.financeproject.utils.dateTime.DateFormat
+import com.financeproject.utils.checkPeriod
+import com.financeproject.utils.findCategory
 import com.financeproject.ui.navigation.DatePanel
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.time.LocalDate

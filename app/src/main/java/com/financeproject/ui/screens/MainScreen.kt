@@ -37,7 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.financeproject.R
 import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
-import com.financeproject.logic.dateTime.DateFormat
+import com.financeproject.utils.dateTime.DateFormat
 import com.financeproject.ui.navigation.FinanceNavigationBar
 import com.financeproject.ui.navigation.NavRoutes
 import com.financeproject.ui.viewmodels.FinanceViewModel
@@ -74,7 +74,8 @@ fun MainScreen(
                 DateFormat.getDateFromMillis(
                     begPeriod!!
                 )
-            ) + " - " + DateFormat.getDateString(DateFormat.getDateFromMillis(endPeriod!!))
+            ) + " - " + DateFormat.getDateString(
+                DateFormat.getDateFromMillis(endPeriod!!))
         )
     }
 

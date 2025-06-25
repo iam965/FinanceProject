@@ -1,4 +1,4 @@
-package com.financeproject.logic.functions
+package com.financeproject.utils
 
 import com.financeproject.data.db.Category
 

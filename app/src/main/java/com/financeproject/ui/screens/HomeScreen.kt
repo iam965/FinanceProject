@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.financeproject.R
 import com.financeproject.data.db.Operation
-import com.financeproject.logic.dateTime.DateFormat
-import com.financeproject.logic.functions.checkPeriod
+import com.financeproject.utils.dateTime.DateFormat
+import com.financeproject.utils.checkPeriod
 import com.financeproject.ui.navigation.DatePanel
 
 @Composable
