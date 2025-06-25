@@ -50,4 +50,7 @@
 
     <string name="selected_period">Выбранный период</string>
 
+    <string name="loading">Загрузка</string>
+    <string name="currency">курса...</string>
+
 </resources>

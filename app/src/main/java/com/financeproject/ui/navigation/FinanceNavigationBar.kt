@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -124,8 +125,8 @@ class FinanceNavigationBar() {
                 when (currency) {
                     is CurrencyState.Loading -> {
                         Column(modifier = Modifier.align(Alignment.CenterEnd), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "Загрузка", style = MaterialTheme.typography.bodyMedium)
-                            Text(text = "курса...", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = stringResource(id = R.string.loading), style = MaterialTheme.typography.bodyMedium)
+                            Text(text = stringResource(id = R.string.currency), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
 

@@ -51,4 +51,7 @@
 
     <string name="selected_period">Selected period</string>
 
+    <string name="loading">Loading</string>
+    <string name="currency">currency...</string>
+
 </resources>

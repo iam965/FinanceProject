@@ -49,6 +49,7 @@ import com.financeproject.ui.navigation.DatePanel
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
+
 @Composable
 fun IncomeScreen(
     financevm: FinanceViewModel,
