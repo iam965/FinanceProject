@@ -91,7 +91,9 @@ class MainActivity : ComponentActivity() {
                             financevm = financevm,
                             allProfit = allProfit,
                             allLoss = allLoss,
-                            allOperations = allOperations
+                            allOperations = allOperations,
+                            allLossCategory = allLossCategory,
+                            allProfitCategory = allProfitCategory
                         )
                     }
                 }
