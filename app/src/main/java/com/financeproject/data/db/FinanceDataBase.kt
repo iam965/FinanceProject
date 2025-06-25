@@ -12,17 +12,17 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
         database.execSQL("""
             CREATE TABLE operations_new (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                amount REAL NOT NULL,
+                value REAL NOT NULL,
                 date TEXT NOT NULL,
                 description TEXT NOT NULL,
                 is_profit INTEGER NOT NULL,
                 categoryId INTEGER NOT NULL DEFAULT 4,
-                FOREIGN KEY(categoryId) REFERENCES categories(id) ON DELETE CASCADE
+                FOREIGN KEY(categoryId) REFERENCES category(id) ON DELETE CASCADE
             )
         """.trimIndent())
         database.execSQL("""
-            INSERT INTO operations_new (id, amount, date, description, is_profit, categoryId)
-            SELECT id, amount, date, description, is_profit, 4 FROM operations
+            INSERT INTO operations_new (id, value, date, description, is_profit, categoryId)
+            SELECT id, value, date, description, is_profit, 4 FROM operations
         """.trimIndent())
         database.execSQL("DROP TABLE operations")
         database.execSQL("ALTER TABLE operations_new RENAME TO operations")
@@ -46,26 +46,26 @@ abstract class FinanceDataBase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     FinanceDataBase::class.java,
-                    "notes_db"
+                    "finance_db"
                 )
-                    .addCallback(object : RoomDatabase.Callback() {
+                    .addMigrations(MIGRATION_3_4)
+                    .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (1, 'Зарплата', 1)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (2, 'Подарки', 1)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (3, 'Бизнес', 1)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (4, 'Другое', 1)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (5, 'Развлечения', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (6, 'Питание', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (7, 'Коммунальные услуги', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (8, 'Образование', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (9, 'Транспорт', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (10, 'Пожертвования', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (11, 'Штрафы', 0)")
-                            db.execSQL("INSERT INTO categories (id, name, is_profit) VALUES (12, 'Другое', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (1, 'Зарплата', 1)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (2, 'Подарки', 1)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (3, 'Бизнес', 1)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (4, 'Другое', 1)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (5, 'Развлечения', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (6, 'Питание', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (7, 'Коммунальные услуги', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (8, 'Образование', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (9, 'Транспорт', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (10, 'Пожертвования', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (11, 'Штрафы', 0)")
+                            db.execSQL("INSERT INTO category (id, category, is_profit) VALUES (12, 'Другое', 0)")
                         }
                     })
-                    .addMigrations(MIGRATION_3_4)
                     .build()
                 Instance = instance
                 return instance

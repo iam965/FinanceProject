@@ -52,6 +52,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.navigation.FinanceNavigationBar
@@ -69,7 +70,9 @@ fun MainScreen(
     financevm: FinanceViewModel,
     allLoss: State<List<Operation>>,
     allProfit: State<List<Operation>>,
-    allOperations: State<List<Operation>>
+    allOperations: State<List<Operation>>,
+    allLossCategory: State<List<Category>>,
+    allProfitCategory: State<List<Category>>
 ) {
     val navController = rememberNavController()
     val navigationBar = FinanceNavigationBar()
@@ -178,7 +181,8 @@ fun MainScreen(
                         beg = begPeriod!!,
                         end = endPeriod!!,
                         date = dateString,
-                        onDateClick = {showPicker = true}
+                        onDateClick = {showPicker = true},
+                        incomeCategory = allProfitCategory.value
                     )
                     title = "Доходы"
                 }
@@ -282,7 +286,8 @@ fun MainScreen(
                         end = endPeriod!!,
                         allLoss = allLoss.value,
                         date = dateString,
-                        onDateClick = {showPicker = true}
+                        onDateClick = {showPicker = true},
+                        lossCategory = allLossCategory.value
                     );
                     navigationBar.currentScreen = "Expense"
                     title = "Расходы"

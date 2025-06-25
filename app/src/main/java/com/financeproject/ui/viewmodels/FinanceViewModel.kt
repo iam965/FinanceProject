@@ -17,6 +17,7 @@ import com.financeproject.data.db.CategoryRepository
 import com.financeproject.ui.state.CurrencyState
 import com.financeproject.ui.state.UIState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -120,6 +121,10 @@ class FinanceViewModel(application: Application, private val UiState: UIState) :
                 currency.value = CurrencyState.Error(e.message.toString())
             }
         }
+    }
+
+    fun getCategoryById(id: Int): Flow<Category?> {
+        return categoryRepository.getCategoryById(id)
     }
 
     fun isCachedData(): Boolean{

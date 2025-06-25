@@ -20,5 +20,5 @@ data class Operation(
     @ColumnInfo(name = "value") val value: Double,
     @ColumnInfo(name = "is_profit") val isprofit: Boolean,
     @ColumnInfo(name = "date") val date: String,
-    @ColumnInfo(name = "categoryId") val categoryId: Long
+    @ColumnInfo(name = "categoryId") val categoryId: Int
 )
