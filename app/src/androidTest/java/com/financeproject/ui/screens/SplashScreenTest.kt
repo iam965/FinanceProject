@@ -26,7 +26,8 @@ class SplashScreenTest {
         composeTestRule.setContent {
             SplashScreen(
                 onSplashFinished = { compositionFinished = true },
-                isTest = true
+                isTest = true,
+                financeViewModel = TODO()
             )
         }
 
@@ -44,7 +45,8 @@ class SplashScreenTest {
         composeTestRule.setContent {
             SplashScreen(
                 onSplashFinished = { callbackTriggered = true },
-                isTest = true
+                isTest = true,
+                financeViewModel = TODO()
             )
         }
 

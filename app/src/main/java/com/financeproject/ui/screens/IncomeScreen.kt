@@ -25,6 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,13 +37,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
+import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
 import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.time.LocalDateTime
 import com.financeproject.logic.functions.checkPeriod
+import com.financeproject.logic.functions.findCategory
 import com.financeproject.ui.navigation.DatePanel
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Composable
@@ -52,7 +56,8 @@ fun IncomeScreen(
     beg: Long,
     end: Long,
     date: String,
-    onDateClick: () -> Unit
+    onDateClick: () -> Unit,
+    incomeCategory: List<Category>
 ) {
     val allIncome by financevm.allProfit.collectAsState()
     var begPeriod = DateFormat.getDateFromMillis(beg)
@@ -106,8 +111,9 @@ fun IncomeScreen(
                     .padding(vertical = 5.dp, horizontal = 5.dp)
             ) {
                 items(periodIncome.reversed()) { entry ->
+                    val category = findCategory(id = entry.categoryId, category = incomeCategory)
                     var showRemoveDialog by remember { mutableStateOf(false) }
-                    IncomeItem(entry, onButton =  { showRemoveDialog = true }, valute = valute)
+                        IncomeItem(entry = entry, category = category, onButton =  { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(
                             onDismiss = { showRemoveDialog = false },
@@ -122,15 +128,17 @@ fun IncomeScreen(
 
         if (showAddDialog) {
             IncomeDialog(
+                incomeCategory = incomeCategory,
                 onDismiss = { showAddDialog = false },
-                onAddIncome = { amount, description ->
+                onAddIncome = { amount, description, catId ->
                     financevm.insertOperation(
                         Operation(
                             id = 0,
                             description = description,
                             value = amount,
                             isprofit = true,
-                            date = DateFormat.getDateString(LocalDate.now())
+                            date = DateFormat.getDateString(LocalDate.now()),
+                            categoryId = catId
                         )
                     )
                     showAddDialog = false
@@ -143,7 +151,7 @@ fun IncomeScreen(
 }
 
 @Composable
-private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
+private fun IncomeItem(entry: Operation, category: Category?, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -160,6 +168,14 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
                 Text(
                     text = entry.description,
                     style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = if (category != null){
+                        category.category
+                    } else {
+                        "No cat"
+                    },
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Text(
                     text = entry.date,
@@ -182,17 +198,23 @@ private fun IncomeItem(entry: Operation, onButton: () -> Unit, valute: String) {
 
 @Composable
 private fun IncomeDialog(
+    incomeCategory: List<Category>,
     onDismiss: () -> Unit,
-    onAddIncome: (Double, String) -> Unit
+    onAddIncome: (Double, String, Int) -> Unit
 ) {
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var selected = findCategory(4, incomeCategory)
+    var selText by remember { mutableStateOf(selected!!.category) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(id=R.string.add_income))},
         text = {
             Column {
+                DDownMenu(list = incomeCategory, text = selText, selected = selected, onItemClick = {
+                        id -> selected = findCategory(id, incomeCategory); selText = selected!!.category
+                })
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
@@ -218,7 +240,7 @@ private fun IncomeDialog(
                 onClick = {
                     val amountValue = amount.toDoubleOrNull() ?: 0.0
                     if (amountValue > 0 && description.isNotBlank()) {
-                        onAddIncome(amountValue, description)
+                        onAddIncome(amountValue, description, selected!!.id)
                     }
                 }
             ) {

@@ -64,6 +64,8 @@ class MainActivity : ComponentActivity() {
             val allLoss = financevm.allLoss.collectAsState()
             val allProfit = financevm.allProfit.collectAsState()
             val allOperations = financevm.allOperations.collectAsState()
+            val allLossCategory = financevm.allLossCategory.collectAsState()
+            val allProfitCategory = financevm.allProfitCategory.collectAsState()
 
             FinanceProjectTheme(financevm) {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -84,6 +86,7 @@ class MainActivity : ComponentActivity() {
                         enter = fadeIn(animationSpec = tween(500)),
                         exit = fadeOut(animationSpec = tween(400))
                     ) {
+                        MainScreen(financevm = financevm, allProfit = allProfit, allLoss = allLoss, allOperations = allOperations, allProfitCategory = allProfitCategory, allLossCategory = allLossCategory)
                         MainScreen(
                             financevm = financevm,
                             allProfit = allProfit,

@@ -18,6 +18,9 @@ interface CategoryDao {
     @Query("SELECT * FROM category WHERE is_profit = 0")
     fun getAllLossCategories(): Flow<List<Category>>
 
+    @Query("SELECT * FROM category WHERE id = :categoryId LIMIT 1")
+    fun getCategoryById(categoryId: Int): Flow<Category?>
+
     @Insert
     fun insertCategory(vararg category: Category)
 

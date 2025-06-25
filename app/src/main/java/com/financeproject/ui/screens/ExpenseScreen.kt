@@ -1,5 +1,6 @@
 package com.financeproject.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,8 +28,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
+import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
 import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
@@ -47,6 +53,8 @@ import java.util.Date
 import java.util.Locale
 import com.financeproject.logic.functions.checkPeriod
 import com.financeproject.ui.navigation.DatePanel
+import kotlinx.coroutines.flow.stateIn
+import com.financeproject.logic.functions.findCategory
 
 @Composable
 fun ExpenseScreen(
@@ -56,9 +64,9 @@ fun ExpenseScreen(
     beg: Long,
     end: Long,
     date: String,
-    onDateClick: () -> Unit
+    onDateClick: () -> Unit,
+    lossCategory: List<Category>
 ) {
-    //val allLoss by financevm.allLoss.collectAsState()
     var begPeriod = DateFormat.getDateFromMillis(beg)
     var endPeriod = DateFormat.getDateFromMillis(end)
     var periodLoss = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allLoss)
@@ -109,8 +117,9 @@ fun ExpenseScreen(
                     .padding(vertical = 5.dp, horizontal = 5.dp)
             ) {
                 items(periodLoss.reversed()) { entry ->
+                    val category = findCategory(id = entry.categoryId, category = lossCategory)
                     var showRemoveDialog by remember { mutableStateOf(false) }
-                    LossItem(entry, onButton = { showRemoveDialog = true }, valute = valute)
+                    LossItem(entry = entry, cat = category, onButton = { showRemoveDialog = true }, valute = valute)
                     if (showRemoveDialog) {
                         RemoveDialog(
                             onDismiss = { showRemoveDialog = false },
@@ -124,15 +133,17 @@ fun ExpenseScreen(
 
         if (showAddDialog) {
             LossDialog(
+                lossCategory = lossCategory,
                 onDismiss = { showAddDialog = false },
-                onAddIncome = { amount, description ->
+                onAddIncome = { amount, description, catId ->
                     financevm.insertOperation(
                         Operation(
                             id = 0,
                             description = description,
                             value = amount,
                             isprofit = false,
-                            date = DateFormat.getDateString(LocalDate.now())
+                            date = DateFormat.getDateString(LocalDate.now()),
+                            categoryId = catId
                         )
                     )
                     showAddDialog = false
@@ -145,7 +156,7 @@ fun ExpenseScreen(
 }
 
 @Composable
-private fun LossItem(entry: Operation, onButton: () -> Unit, valute: String) {
+private fun LossItem(entry: Operation, cat: Category?, onButton: () -> Unit, valute: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,6 +173,14 @@ private fun LossItem(entry: Operation, onButton: () -> Unit, valute: String) {
                 Text(
                     text = entry.description,
                     style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = if (cat != null){
+                        cat.category
+                    } else {
+                        "No cat"
+                    },
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Text(
                     text = entry.date,
@@ -183,17 +202,23 @@ private fun LossItem(entry: Operation, onButton: () -> Unit, valute: String) {
 
 @Composable
 private fun LossDialog(
+    lossCategory: List<Category>,
     onDismiss: () -> Unit,
-    onAddIncome: (Double, String) -> Unit
+    onAddIncome: (Double, String, Int) -> Unit
 ) {
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var selected = findCategory(12, lossCategory)
+    var selText by remember { mutableStateOf(selected!!.category) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(id = R.string.add_expense)) },
         text = {
             Column {
+                DDownMenu(list = lossCategory, text = selText, selected = selected, onItemClick = {
+                    id -> selected = findCategory(id, lossCategory); selText = selected!!.category
+                })
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
@@ -219,7 +244,7 @@ private fun LossDialog(
                 onClick = {
                     val amountValue = amount.toDoubleOrNull() ?: 0.0
                     if (amountValue > 0 && description.isNotBlank()) {
-                        onAddIncome(amountValue, description)
+                        onAddIncome(amountValue, description, selected!!.id)
                     }
                 }
             ) {

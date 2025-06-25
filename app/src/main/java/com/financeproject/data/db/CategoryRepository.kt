@@ -17,4 +17,8 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
     suspend fun deleteCategory(category: Category) {
         categoryDao.deleteCategory(category)
     }
+
+    fun getCategoryById(id: Int): Flow<Category?> {
+        return categoryDao.getCategoryById(id)
+    }
 }
