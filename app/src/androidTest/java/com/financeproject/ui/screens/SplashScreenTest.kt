@@ -22,7 +22,6 @@ class SplashScreenTest {
     @Test
     fun splashScreen_isDisplayed() {
         var compositionFinished = false
-        
         composeTestRule.setContent {
             SplashScreen(
                 onSplashFinished = { compositionFinished = true },
@@ -44,6 +43,7 @@ class SplashScreenTest {
         composeTestRule.setContent {
             SplashScreen(
                 onSplashFinished = { callbackTriggered = true },
+
                 isTest = true
             )
         }

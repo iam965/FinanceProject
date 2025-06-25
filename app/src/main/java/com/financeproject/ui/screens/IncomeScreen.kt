@@ -45,6 +45,7 @@ import com.financeproject.logic.functions.checkPeriod
 import com.financeproject.ui.navigation.DatePanel
 import java.time.LocalDate
 
+
 @Composable
 fun IncomeScreen(
     financevm: FinanceViewModel,
