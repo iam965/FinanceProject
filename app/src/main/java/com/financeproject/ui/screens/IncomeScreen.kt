@@ -25,7 +25,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +38,11 @@ import androidx.compose.ui.unit.dp
 import com.financeproject.R
 import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
-import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
-import com.financeproject.ui.viewmodels.FinanceViewModel
-import java.time.LocalDateTime
 import com.financeproject.logic.functions.checkPeriod
 import com.financeproject.logic.functions.findCategory
 import com.financeproject.ui.navigation.DatePanel
-import kotlinx.coroutines.flow.Flow
+import com.financeproject.ui.viewmodels.FinanceViewModel
 import java.time.LocalDate
 
 

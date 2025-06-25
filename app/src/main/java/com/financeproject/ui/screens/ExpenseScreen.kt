@@ -1,6 +1,5 @@
 package com.financeproject.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +16,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -28,10 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,18 +37,12 @@ import androidx.compose.ui.unit.dp
 import com.financeproject.R
 import com.financeproject.data.db.Category
 import com.financeproject.data.db.Operation
-import com.financeproject.logic.dateTime.DateComparator
 import com.financeproject.logic.dateTime.DateFormat
-import com.financeproject.ui.viewmodels.FinanceViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.Date
-import java.util.Locale
 import com.financeproject.logic.functions.checkPeriod
-import com.financeproject.ui.navigation.DatePanel
-import kotlinx.coroutines.flow.stateIn
 import com.financeproject.logic.functions.findCategory
+import com.financeproject.ui.navigation.DatePanel
+import com.financeproject.ui.viewmodels.FinanceViewModel
+import java.time.LocalDate
 
 @Composable
 fun ExpenseScreen(
