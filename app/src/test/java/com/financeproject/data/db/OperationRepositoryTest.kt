@@ -134,6 +134,7 @@ class OperationRepositoryTest {
         description = description,
         value = value,
         isprofit = isProfit,
-        date = "2024-03-20"
+        date = "2024-03-20",
+        categoryId = 4
     )
 } 

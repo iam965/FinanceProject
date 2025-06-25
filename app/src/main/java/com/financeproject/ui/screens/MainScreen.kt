@@ -113,7 +113,6 @@ fun MainScreen(
                                     .fillMaxWidth()
                                     .padding(10.dp)
                             ) {
-                                Button(onClick = { showPicker = false }) { Text(stringResource(id = R.string.cancel)) }
                                 Button(onClick = {
                                     showPicker = false
                                 }) { Text(stringResource(id = R.string.cancel)) }
