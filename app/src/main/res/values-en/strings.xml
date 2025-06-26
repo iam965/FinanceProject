@@ -55,5 +55,17 @@
     <string name="currency">currency...</string>
 
     <string name="category">Category</string>
+    <string name="cat_salary">Salary</string>
+    <string name="cat_gift">Gift</string>
+    <string name="cat_business">Business</string>
+    <string name="cat_other_i">Other</string>
+    <string name="cat_entertainment">Entertainment</string>
+    <string name="cat_nutrition">Nutrition</string>
+    <string name="cat_utilities">Utilities</string>
+    <string name="cat_education">Education</string>
+    <string name="cat_transport">Transport</string>
+    <string name="cat_donation">Donation</string>
+    <string name="cat_fine">Fine</string>
+    <string name="cat_other_e">Other</string>
 
 </resources>

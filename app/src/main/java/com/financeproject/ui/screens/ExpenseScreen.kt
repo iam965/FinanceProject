@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
@@ -42,6 +43,7 @@ import com.financeproject.utils.checkPeriod
 import com.financeproject.utils.findCategory
 import com.financeproject.ui.navigation.DatePanel
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import com.financeproject.utils.getLocalizedCat
 import java.time.LocalDate
 
 @Composable
@@ -145,6 +147,7 @@ fun ExpenseScreen(
 
 @Composable
 private fun LossItem(entry: Operation, cat: Category?, onButton: () -> Unit, valute: String) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -164,7 +167,7 @@ private fun LossItem(entry: Operation, cat: Category?, onButton: () -> Unit, val
                 )
                 Text(
                     text = if (cat != null){
-                        cat.category
+                        getLocalizedCat(context, cat )
                     } else {
                         "No cat"
                     },
