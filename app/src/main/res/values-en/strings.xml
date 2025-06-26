@@ -54,4 +54,6 @@
     <string name="loading">Loading</string>
     <string name="currency">currency...</string>
 
+    <string name="category">Category</string>
+
 </resources>
