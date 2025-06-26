@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -99,7 +100,15 @@ private fun BalanceCard(balance: Double, valute: String) {
 private fun IncomeExpenseStats(income: Double, expense: Double, valute: String) {
     var max = findmax(income, expense)
     Row(
-        modifier = Modifier.fillMaxWidth().height(if (max == 0.0) {68.dp} else {170.dp}),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(
+                if (max == 0.0) {
+                    68.dp
+                } else {
+                    170.dp
+                }
+            ),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.Bottom
     ) {
@@ -147,20 +156,21 @@ private fun StatCard(title: String, value: Double, color: Color, valute: String)
     Card(
         modifier = Modifier
             .width(150.dp)
-            .height(68.dp)
+            .height(70.dp)
     ) {
         Column(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.primaryContainer)
-                .padding(8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(title)
+            Text(title, color = MaterialTheme.colorScheme.onPrimaryContainer)
             Spacer(Modifier.height(2.dp))
             Text(
                 text = "%.2f".format(value) + valute,
-                color = color,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = FontWeight.Medium
             )
         }

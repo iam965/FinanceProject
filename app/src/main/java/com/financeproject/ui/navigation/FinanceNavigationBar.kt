@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
@@ -60,7 +61,8 @@ class FinanceNavigationBar() {
 
     @Composable
     fun BottomNavBar(navController: NavController) {
-        NavigationBar() {
+        NavigationBar(containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer) {
             val backStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry.value?.destination?.route
 
@@ -83,7 +85,16 @@ class FinanceNavigationBar() {
                             contentDescription = navItem.title,
                             modifier = Modifier.size(40.dp)
                         )
-                    }
+                    },
+                    colors = NavigationBarItemColors(
+                        unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        selectedIndicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                        selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledTextColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 )
             }
 
@@ -95,11 +106,11 @@ class FinanceNavigationBar() {
     fun TopBar(navController: NavController, txt: String, vm: FinanceViewModel) {
         val currency = vm.currency.value
         CenterAlignedTopAppBar(colors = TopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurface
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ), title = {
             Box(
                 modifier = Modifier

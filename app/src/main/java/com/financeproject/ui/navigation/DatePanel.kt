@@ -26,12 +26,12 @@ fun DatePanel(date: String, onClick: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .background(color = MaterialTheme.colorScheme.background)
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Text(stringResource(id = R.string.selected_period))
-            Text(date)
+            Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onBackground)
+            Text(date, color = MaterialTheme.colorScheme.onBackground)
         }
     }
     HorizontalDivider(
