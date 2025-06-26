@@ -18,29 +18,20 @@ import com.financeproject.R
 
 @Composable
 fun DatePanel(date: String, onClick: () -> Unit) {
-    Card(
-        Modifier
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
             .fillMaxWidth()
-            .padding(3.dp)
-            .clickable { onClick() }) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.background)
-                .fillMaxWidth()
-                .padding(5.dp)
-        ) {
-            Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onBackground)
-            Text(date, color = MaterialTheme.colorScheme.onBackground)
-        }
+            .padding(5.dp)
+    ) {
+        Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onBackground)
+        Text(date, color = MaterialTheme.colorScheme.onPrimaryContainer)
     }
     HorizontalDivider(
         modifier = Modifier
             .padding(
-                top = 0.dp,
-                bottom = 0.dp,
-                start = 5.dp,
-                end = 5.dp
+                0.dp
             ),
         thickness = 1.dp
     )

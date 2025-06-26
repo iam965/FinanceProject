@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
@@ -89,6 +90,7 @@ fun MainScreen(
         bottomBar = { navigationBar.BottomNavBar(navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
+            HorizontalDivider()
             Column {
                 if (showPicker) {
                     DatePickerDialog(
@@ -308,6 +310,7 @@ fun MainScreen(
                     title = stringResource(id = R.string.settings_title)
                 }
             }
+            HorizontalDivider()
         }
     }
 }
