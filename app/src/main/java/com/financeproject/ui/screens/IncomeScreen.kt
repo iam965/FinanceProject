@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
@@ -43,6 +44,7 @@ import com.financeproject.utils.checkPeriod
 import com.financeproject.utils.findCategory
 import com.financeproject.ui.navigation.DatePanel
 import com.financeproject.ui.viewmodels.FinanceViewModel
+import com.financeproject.utils.getLocalizedCat
 import java.time.LocalDate
 
 
@@ -62,6 +64,7 @@ fun IncomeScreen(
     var periodIncome = checkPeriod(beg = begPeriod, end = endPeriod, allOperations = allIncome)
     var showAddDialog by remember { mutableStateOf(false) }
     val totalIncome = periodIncome.sumOf { it.value }
+    val context= LocalContext
 
     Column {
         Column(
@@ -149,6 +152,7 @@ fun IncomeScreen(
 
 @Composable
 private fun IncomeItem(entry: Operation, category: Category?, onButton: () -> Unit, valute: String) {
+    val context =LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -168,7 +172,7 @@ private fun IncomeItem(entry: Operation, category: Category?, onButton: () -> Un
                 )
                 Text(
                     text = if (category != null){
-                        category.category
+                        getLocalizedCat(context,category)
                     } else {
                         "No cat"
                     },
