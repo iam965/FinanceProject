@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -72,6 +73,7 @@ fun HomeScreen(
 @Composable
 private fun BalanceCard(balance: Double, valute: String) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
@@ -154,6 +156,7 @@ private fun Diagram(value: Double, sum: Double, color: Color, text: String, valu
 @Composable
 private fun StatCard(title: String, value: Double, color: Color, valute: String) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
             .width(150.dp)
             .height(70.dp)
@@ -200,6 +203,7 @@ private fun RecentOperations(operations: List<Operation>, valute: String) {
 @Composable
 private fun OperationItem(operation: Operation, valute: String) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
