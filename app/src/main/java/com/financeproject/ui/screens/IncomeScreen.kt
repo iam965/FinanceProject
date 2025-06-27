@@ -108,6 +108,7 @@ fun IncomeScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
                     .padding(vertical = 5.dp, horizontal = 5.dp)
             ) {
                 items(periodIncome.reversed()) { entry ->
