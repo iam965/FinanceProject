@@ -53,4 +53,19 @@
     <string name="loading">Загрузка</string>
     <string name="currency">курса...</string>
 
+    <string name="category">Категория</string>
+    <string name="cat_salary">Зарплата</string>
+    <string name="cat_gift">Подарки</string>
+    <string name="cat_business">Бизнес</string>
+    <string name="cat_other_i">Другое</string>
+    <string name="cat_entertainment">Развлечения</string>
+    <string name="cat_nutrition">Питиание</string>
+    <string name="cat_utilities">Коммунальные услуги</string>
+    <string name="cat_education">Образование</string>
+    <string name="cat_transport">Транспорт</string>
+    <string name="cat_donation">Пожертвования</string>
+    <string name="cat_fine">Штраф</string>
+    <string name="cat_other_e">Другое</string>
+
+
 </resources>
