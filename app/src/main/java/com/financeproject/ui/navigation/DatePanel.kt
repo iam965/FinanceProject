@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.financeproject.R
@@ -21,18 +22,13 @@ fun DatePanel(date: String, onClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .clickable { onClick() }
+            .shadow(elevation = 8.dp)
             .background(color = MaterialTheme.colorScheme.primaryContainer)
-            .fillMaxWidth()
             .padding(5.dp)
+            .fillMaxWidth()
     ) {
         Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onBackground)
         Text(date, color = MaterialTheme.colorScheme.onPrimaryContainer)
     }
-    HorizontalDivider(
-        modifier = Modifier
-            .padding(
-                0.dp
-            ),
-        thickness = 1.dp
-    )
 }
