@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.imageResource
@@ -62,7 +63,8 @@ class FinanceNavigationBar() {
 
     @Composable
     fun BottomNavBar(navController: NavController) {
-        NavigationBar(containerColor = MaterialTheme.colorScheme.primaryContainer,
+        NavigationBar(modifier = Modifier.shadow(elevation = 8.dp),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer) {
             val backStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry.value?.destination?.route

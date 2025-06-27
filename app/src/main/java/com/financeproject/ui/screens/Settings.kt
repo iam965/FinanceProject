@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -45,6 +46,7 @@ fun Settings(financevm: FinanceViewModel) {
             .fillMaxWidth()
     ) {
         Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
@@ -63,6 +65,7 @@ fun Settings(financevm: FinanceViewModel) {
             }
         }
         Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
@@ -81,6 +84,7 @@ fun Settings(financevm: FinanceViewModel) {
             }
         }
         Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
@@ -99,6 +103,7 @@ fun Settings(financevm: FinanceViewModel) {
             }
         }
         Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
@@ -191,7 +196,6 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit,current
                             }
                         }
                 )
-                Divider()
                 Text(
                     text = stringResource(id = R.string.dollar),
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -211,7 +215,6 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit,current
                             }
                         }
                 )
-                Divider()
                 Text(
                     text = stringResource(id = R.string.euro),
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -275,7 +278,6 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit,curre
                             }
                         }
                 )
-                Divider()
                 Text(
                     text = stringResource(id = R.string.english),
                     style = MaterialTheme.typography.bodyLarge.copy(
