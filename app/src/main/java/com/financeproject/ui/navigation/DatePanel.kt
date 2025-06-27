@@ -28,7 +28,7 @@ fun DatePanel(date: String, onClick: () -> Unit) {
             .padding(5.dp)
             .fillMaxWidth()
     ) {
-        Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onBackground)
+        Text(stringResource(id = R.string.selected_period), color = MaterialTheme.colorScheme.onPrimaryContainer)
         Text(date, color = MaterialTheme.colorScheme.onPrimaryContainer)
     }
 }
