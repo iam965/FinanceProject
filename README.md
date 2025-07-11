@@ -115,6 +115,32 @@ class FinanceNavigationBar {
 
 ## 🗂️ Структура проекта
 
+app/
+  └── src/
+      ├── main/
+      │   ├── java/com/financeproject/
+      │   │   ├── data/
+      │   │   │   ├── api/         # Работа с валютами и API
+      │   │   │   ├── db/          # Модели, DAO и репозитории базы данных
+      │   │   ├── ui/
+      │   │   │   ├── navigation/  # Навигация и нижняя панель
+      │   │   │   ├── screens/     # Экраны приложения (Home, Expense, Income, Settings и др.)
+      │   │   │   ├── state/       # Состояния UI и валют
+      │   │   │   ├── theme/       # Цвета, темы, типографика
+      │   │   │   ├── viewmodels/  # ViewModel-ы для управления логикой
+      │   │   ├── utils/           # Вспомогательные функции и утилиты
+      │   │   └── MainActivity.kt  # Главная активность приложения
+      │   ├── res/
+      │   │   ├── drawable/        # Иконки, изображения
+      │   │   ├── values/          # Строки, темы, цвета
+      │   │   └── ...              # Прочие ресурсы (mipmap, xml и др.)
+      │   └── AndroidManifest.xml  # Манифест приложения
+      ├── test/                    # Модульные тесты
+      └── androidTest/             # Инструментальные тесты
+build.gradle.kts                   # Скрипт сборки проекта
+settings.gradle.kts                # Настройки Gradle
+README.md                          # Описание проекта
+screenshots/                       # Скриншоты для README
 
 
 ---
