@@ -112,7 +112,7 @@ class FinanceNavigationBar {
     }
 }
 ```
-
+---
 ## 🗂️ Структура проекта
 
 ```plaintext
@@ -143,8 +143,6 @@ settings.gradle.kts
 README.md
 screenshots/
 ```
-
-
 ---
 
 ## 🎨 UI/UX
