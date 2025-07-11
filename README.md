@@ -39,13 +39,16 @@
 ---
 
 ## 🚀 Быстрый старт
-
+**1**
 1. Клонируйте репозиторий:
    ```bash
    git clone https://github.com/iam965/FinanceProject
    ```
 2. Откройте проект в Android Studio.
 3. Соберите и запустите на эмуляторе или устройстве.
+
+**2**
+   второсой способ
 
 ---
 
@@ -54,43 +57,61 @@
 ### Модель операции
 
 ```kotlin
-@Entity(tableName = "operations")
+@Entity(
+    tableName = "operations",
+    foreignKeys = [
+        ForeignKey(
+            entity = Category::class,
+            parentColumns = ["id"],
+            childColumns = ["categoryId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class Operation(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val amount: Double,
-    val category: String,
-    val date: Long,
-    val type: String // "income" или "expense"
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    val description: String,
+    val value: Double,
+    val isprofit: Boolean,
+    val date: String,
+    val categoryId: Int
 )
 ```
 
 ### ViewModel
 
 ```kotlin
-class FinanceViewModel @Inject constructor(
-    private val operationRepository: OperationRepository,
-    private val categoryRepository: CategoryRepository
-) : ViewModel() {
-    val operations = MutableStateFlow<List<Operation>>(emptyList())
+class FinanceViewModel(application: Application, private val UiState: UIState) : AndroidViewModel(application) {
+    val allOperations: StateFlow<List<Operation>>
+    val isDarkTheme: State<Boolean>
+    val currency: MutableState<CurrencyState>
+
+    fun insertOperation(operation: Operation) { /* ... */ }
+    fun deleteOperation(operation: Operation) { /* ... */ }
+    fun changeTheme() { /* ... */ }
+    fun getDailyRates(forced: Boolean = false) { /* ... */ }
     // ...
-    fun addOperation(operation: Operation) { /* ... */ }
-    fun getBalance(): Double { /* ... */ }
 }
 ```
 
 ### Пример навигации
 
 ```kotlin
-@Composable
-fun FinanceNavigationBar(navController: NavController) {
-    // ...
-    BottomNavigation {
-        // ...
+class FinanceNavigationBar {
+    @Composable
+    fun BottomNavBar(navController: NavController) {
+        NavigationBar {
+            items.forEach { navItem ->
+                NavigationBarItem(
+                    selected = currentRoute == navItem.route,
+                    onClick = { navController.navigate(navItem.route) { /* ... */ } },
+                    icon = { Icon(painter = BitmapPainter(ImageBitmap.imageResource(navItem.image)), contentDescription = navItem.title) }
+                )
+            }
+        }
     }
 }
 ```
-
----
 
 ## 🗂️ Структура проекта
 
