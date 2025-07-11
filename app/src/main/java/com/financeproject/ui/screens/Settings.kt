@@ -196,6 +196,7 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit,current
                             }
                         }
                 )
+                Divider()
                 Text(
                     text = stringResource(id = R.string.dollar),
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -215,6 +216,7 @@ private fun ValutePicker(onPick: (String) -> Unit, onDismiss: () -> Unit,current
                             }
                         }
                 )
+                Divider()
                 Text(
                     text = stringResource(id = R.string.euro),
                     style = MaterialTheme.typography.bodyLarge.copy(
@@ -278,6 +280,7 @@ private fun ChangeLanguage(onPick: (String) -> Unit, onDismiss: () -> Unit,curre
                             }
                         }
                 )
+                Divider()
                 Text(
                     text = stringResource(id = R.string.english),
                     style = MaterialTheme.typography.bodyLarge.copy(
