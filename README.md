@@ -14,7 +14,7 @@
 
 | Главный экран | Добавление операции | Аналитика | Настройки |
 |--------------|---------------------|-----------|-----------|
-| ![home](screenshots/home.png) |![addexpense](screenshots/add_operation.png) | ![diagram](screenshots/diagram.png) | ![settings](screenshots/settings.png) |
+| ![home](screenshots/home.png) |![addexpense](screenshots/add.png) | ![diagram](screenshots/diagram.png) | ![settings](screenshots/settings.png) |
 
 ---
 
