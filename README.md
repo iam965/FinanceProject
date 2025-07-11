@@ -13,8 +13,8 @@
 ## 🖼️ Скриншоты
 
 | Главный экран | Добавление операции | Аналитика | Настройки |
-|--------------|---------------------|-----------|-----------|
-| <img src="screenshots/home.png" width="315"/>| <img src="screenshots/add.png" width="315"/> | <img src="screenshots/diagram.png" width="315"/> |  <img src="screenshots/settings.png" width="315"/>|
+|---------------|---------------------|-----------|-----------|
+| <img src="screenshots/home.png" height="615"/> | <img src="screenshots/add.png"  height="615"/> | <img src="screenshots/diagram.png"  height="615"/> | <img src="screenshots/settings.png"  height="615"/>|
 
 ---
 
