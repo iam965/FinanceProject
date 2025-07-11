@@ -14,7 +14,7 @@
 
 | Главный экран | Добавление операции | Аналитика | Настройки |
 |--------------|---------------------|-----------|-----------|
-| ![Главный экран](app/src/main/res/drawable/home_icon1.png) |![add_operation(expense)](screenshots/add_operation.jpg) | _Добавьте скриншот_ | _Добавьте скриншот_ |
+| ![home](screenshots/home.jpg) |![addexpense](screenshots/add_operation.jpg) | ![diagram](screenshots/diagram.jpg) | ![settings](screenshots/settings.jpg) |
 
 ---
 
