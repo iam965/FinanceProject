@@ -169,7 +169,7 @@ screenshots/
 
 ## 📄 Лицензия
 
-MIT License © 2024 [Ваше Имя]
+MIT License © 2025 MMM
 
 ---
 
