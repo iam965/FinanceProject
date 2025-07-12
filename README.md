@@ -16,7 +16,6 @@
 |---------------|---------------------|-----------|-----------|
 | <img src="screenshots/home.png" height="615"/> | <img src="screenshots/add.png"  height="615"/> | <img src="screenshots/diagram.png"  height="615"/> | <img src="screenshots/settings.png"  height="615"/>|
 
----
 <img src="screenshots/img.jpg" height="450"/> <img src="screenshots/img1.jpg" height="450"/> <img src="screenshots/img3.jpg" height="450"/> <img src="screenshots/img8.jpg" height="450"/>
 ---
 
