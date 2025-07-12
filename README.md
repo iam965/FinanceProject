@@ -18,6 +18,8 @@
 
 ---
 
+---
+
 ## 🧩 Структура приложения
 
 - **Главный экран:** Сводка по балансу, быстрый доступ к операциям
@@ -120,29 +122,27 @@ class FinanceNavigationBar {
 app/
   └── src/
       ├── main/
+      |   ├── assets/              # 
       │   ├── java/com/financeproject/
       │   │   ├── data/
-      │   │   │   ├── api/
-      │   │   │   ├── db/
+      │   │   │   ├── api/         # Работа с внешним API(курс валют)
+      │   │   │   ├── db/          # Сущности, база данных и репозитории
       │   │   ├── ui/
-      │   │   │   ├── navigation/
-      │   │   │   ├── screens/
-      │   │   │   ├── state/
-      │   │   │   ├── theme/
-      │   │   │   ├── viewmodels/
-      │   │   ├── utils/
-      │   │   └── MainActivity.kt
+      │   │   │   ├── navigation/  # Навигация
+      │   │   │   ├── screens/     # Экраны приложения
+      │   │   │   ├── state/       # Состояния UI и валют
+      │   │   │   ├── theme/       # Цвета, темы, типография
+      │   │   │   ├── viewmodels/  # ViewModel для управления логикой
+      │   │   ├── utils/           # Вспомогательные функции (период, локализация, категории)
+      │   │   └── MainActivity.kt  # Главная активность приложения
       │   ├── res/
-      │   │   ├── drawable/
-      │   │   ├── values/
-      │   │   └── ...
-      │   └── AndroidManifest.xml
-      ├── test/
-      └── androidTest/
-build.gradle.kts
-settings.gradle.kts
-README.md
-screenshots/
+      │   │   ├── drawable/        # Каритнки, иконки
+      │   │   ├── values/          # Строки, цвета, темы, стили
+      │   │   └── ...              # Прочие ресурсы
+      │   └── AndroidManifest.xml  # Манифест приложения
+      ├── test/                    # Модульные (unit) тесты
+      └── androidTest/             # Инструментальные (UI) тесты
+APK/                               # APK для ручной установки
 ```
 ---
 
