@@ -156,7 +156,12 @@ screenshots/
 
 ## 👨‍💻 Авторы
 
-   **Долгополов И. А и Михайлов А. И**  
+   **Долгополов И. А**
+
+   - 🐱 GitHub: @iam965
+   - 📱 Telegram: @feelpain1488
+   
+   **Михайлов А. И**  
 - 📧 Email: [your.email@example.com](mailto:your.email@example.com)
 - 🐱 GitHub: [@yourusername](https://github.com/yourusername)
 - 📱 Telegram: [@yourusername](https://t.me/yourusername)
