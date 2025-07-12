@@ -158,8 +158,8 @@ screenshots/
 
    **Долгополов И. А**
 
-   - 🐱 GitHub: @iam965
-   - 📱 Telegram: @feelpain1488
+   - 🐱 GitHub: [@iam965](https://github.com/iam965)
+   - 📱 Telegram: [@feelpain1488](https://t.me/feelpain1488)
    
    **Михайлов А. И**  
 - 📧 Email: [your.email@example.com](mailto:your.email@example.com)
