@@ -52,6 +52,8 @@
 
     <string name="loading">Загрузка</string>
     <string name="currency">курса...</string>
+    <string name="outdated">Устарел</string>
+    <string name="error">Ошибка</string>
 
     <string name="category">Категория</string>
     <string name="cat_salary">Зарплата</string>

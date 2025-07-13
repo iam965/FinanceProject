@@ -160,7 +160,7 @@ class FinanceNavigationBar() {
                             )
                             if (vm.isCachedData()) {
                                 Text(
-                                    text = "Устарел",
+                                    text =  stringResource(id = R.string.outdated),
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
@@ -169,7 +169,7 @@ class FinanceNavigationBar() {
 
                     is CurrencyState.Error -> {
                         Text(
-                            text = "Error",
+                            text = stringResource(id = R.string.error),
                             modifier = Modifier
                                 .clickable(onClick = { vm.getDailyRates(true) })
                                 .align(Alignment.CenterEnd)
